@@ -1,0 +1,52 @@
+h2 {
+    text-align: center;
+    padding-bottom: 10px;
+}
+body {
+    background-color: rgba(203, 209, 218, 0.877);
+    padding: 2em;
+    font-family: 'Verdana';
+    width: 900px;
+    margin: auto;
+    font-size: 15px;
+}
+div.Hontainer {
+    width: 100%;
+    margin: 0 auto;
+}
+label {
+    display: inline-block;
+    padding: 20px;
+    clear: both;
+}
+#output{
+    display: inline-block;
+    background-color: aquamarine;
+    padding: 1em 10px;
+    width: 60%;
+}
+#errorHolder{
+    display: inline-block;
+    background-color: coral;
+    padding: 1em 10px;
+    width: 60%;
+}
+.center-label {
+    margin: 1em 1em;
+}
+input {
+    padding:8px;
+    width: 60%;
+    margin-bottom: 0.5em;
+}
+button {
+    font-family: 'Verdana';
+    margin: 1em auto;
+    padding: 12px 1em;
+    background-color: #1479F5;
+    color: white;
+    font-size: 15px;
+}
+button:hover {
+    background-color: rgb(1, 146, 20);
+}

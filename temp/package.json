@@ -1,7 +1,7 @@
 {
   "name": "myfirstdapp",
   "version": "1.0.0",
-  "main": "truffle-config.js",
+  "main": "truffle-con.js",
   "directories": {
     "test": "test"
   },
@@ -9,14 +9,15 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server/main.js",
     "dev": "node_modules/.bin/webpack && node server/main.js",
-    "webpack": "node_modules/.bin/webpack --watch"
+    "webpack": "node_modules/.bin/webpack --watch",
+    "build": "webpack"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
     "truffle-contract": "^4.0.31",
-    "web3": "^1.7.1",
+    "web3": "^1.2.2",
     "webpack": "^4.41.1",
     "webpack-cli": "^4.9.2"
   },

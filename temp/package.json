@@ -1,7 +1,7 @@
 {
   "name": "myfirstdapp",
   "version": "1.0.0",
-  "main": "server/main.js",
+  "main": "truffle-config.js",
   "directories": {
     "test": "test"
   },

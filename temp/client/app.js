@@ -124,8 +124,8 @@ App = {
     init : async function (){
         await App.initWeb3();
         console.log("In app.js init, initiated App");
-        }
     }
+}
  
 $(function() {
     $(window).load(function() {         

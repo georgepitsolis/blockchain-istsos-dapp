@@ -1,13 +1,18 @@
 require('dotenv').config();
 const express = require('express');
 const chalk = require("chalk");
+const path = require('path');
 
 const PORT = process.env.SERVER_PORT || 3000;
 const IP = process.env.SERVER_IP || "127.0.0.1";
 const app = express();
 
 // set the view engine to ejs
+// app.use(express.static(path.join(__dirname, 'views/css')));
 app.set('view engine', 'ejs');
+// app.set('views', 'views')
+// app.use(express.static('app.js'));
+// app.use(express.static('build/contracts'));
 // use res.render to load up an ejs view file
 
 // index page

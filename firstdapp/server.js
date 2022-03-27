@@ -20,9 +20,19 @@ app.get('/', function(req, res) {
     res.render('pages/main');
 });
 
+// add page
+app.get('/add', function(req, res) {
+    res.render('pages/add');
+});
+
 // about page
-app.get('/about', function(req, res) {
-    res.render('pages/about');
+app.get('/chart', function(req, res) {
+    res.render('pages/chart');
+});
+
+// about page
+app.get('/timeline', function(req, res) {
+    res.render('pages/timeline');
 });
 
 app.get('*', (req, res) => {

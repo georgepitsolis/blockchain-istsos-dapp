@@ -27,12 +27,12 @@
                     <div class="p-5 mb-4 text-white bg-dark rounded-3">
                         <h5>Connect to istSOS database</h5>
                         <div class="input-group input-group-sm mb-3">
-                            <span class="input-group-text" id="inputGroup-sizing-default">Url</span>
-                            <input type="text" id="url-input" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                            <span class="input-group-text" id="inputGroup-sizing-default">Ip</span>
+                            <input type="text" id="Ip-input" placeholder="<%= process.env.ISTSOS_IP %>" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                         </div>
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing-default">Db</span>
-                            <input type="text" id="db-input" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                            <input type="text" id="db-input" placeholder="<%= process.env.ISTSOS_DB %>" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                         </div>
                     </div>
 
@@ -51,8 +51,10 @@
                             </table> 
                         </div>
 
-                        <button class="btn mt-4 btn-light" type="button" id="btm-select-files">Select files</button>
+                        <button class="btn mt-4 btn-light" type="button" id="btn-select-files">Select files</button>
                         <input type="file" id="selected-files" name="files" accept=".txt" style="display: none;" multiple>
+                                
+                        <button class="btn mt-4 btn-success" type="button" id="btn-submit" disabled="disabled">Submit</button>
                     </div>
 
                 </div>
@@ -63,7 +65,7 @@
                 <div class="h-100 p-5 bg-light rounded-3">
                     <h2>Blockchain history</h2>
                     <p>All previous additions which have been applied on blockchain</p>
-                    <a class="btn btn-outline-dark" type="button" id="btm-timeline" href="/timeline"><i class="bi bi-clock-history"></i> Timeline</a>
+                    <a class="btn btn-outline-dark" type="button" id="btn-timeline" href="/timeline"><i class="bi bi-clock-history"></i> Timeline</a>
                 </div>                
             </div>
         </div>
@@ -72,7 +74,6 @@
             Copyright &copy; 2022 Giorgos Pitsolis ECE NTUA
         </footer>
 
-        <div id="liveAlertPlaceholder"></div>
     </div>
 
     <!-- JavaScript Bundle with Popper -->
@@ -80,41 +81,68 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     
     <script>
+
         $(document).ready(function() {
             
             var allfiles = []
 
             // Remove a row from table
             $('#table-selected-files').on('click', '.remove', function () {
-                $(this).closest('tr').remove();
+                const fileDel = $(this).closest('tr');
+                const curFile = fileDel.get(0).children[1].innerHTML;
+                allfiles.splice(allfiles.indexOf(curFile), 1);
+                fileDel.remove();
+                changeSubmit();
+                print(allfiles);
             });
 
             // Select 
-            $("#btm-select-files").on('click', function() {
+            $("#btn-select-files").on('click', function() {
                 $('#selected-files').trigger('click');
             });
 
             $("#selected-files").change(function() {
                 
                 for (var i = 0; i < $(this).get(0).files.length; ++i) {
-                    if (allfiles.includes($(this).get(0).files[i].name) == false) {
-                        allfiles.push($(this).get(0).files[i].name);
+                    const fileName = $(this).get(0).files[i].name;
+                    if (allfiles.includes(fileName) == false) {
+                        allfiles.push(fileName);
 
                         // Adding a row inside the tbody.
                         $('#table-selected-files').append(
                             `<tr>
                             <td>${(allfiles[i]).split('_')[0].toUpperCase()}</td>
-                            <td>${allfiles[i]}</td>
+                            <td id="selected-file">${allfiles[i]}</td>
                             <td>
                                 <button style="all: unset; cursor: pointer;" type="button" class="btn remove"><i class="bi bi-trash"></i></button>
                             </td>
                             </tr>`);
                     }
+                    print(allfiles);
                 }
-                
-                console.log(allfiles);
-            });            
+                changeSubmit();
+            });  
+            
+            $("#Ip-input").change(function() {
+                const newIp = $("#Ip-input").val();
+                console.log(newIp);
+            });
+
+            function changeSubmit() {
+                if (allfiles.length != 0) {
+                    $("#btn-submit").removeAttr('disabled');
+                }else {
+                    $("#btn-submit").attr('disabled', true);
+                };
+            };
+
+            function print(value) {
+                console.log(value);
+            };
         });
+
+        
+
 
     </script>
 </body>

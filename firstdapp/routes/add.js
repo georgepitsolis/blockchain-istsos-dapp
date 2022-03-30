@@ -8,4 +8,7 @@ router.get('/', function(req, res) {
     });
 });
 
+router.post('/upload/data', function(req, res) {
+    
+})
 module.exports = router;

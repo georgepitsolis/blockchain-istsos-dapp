@@ -7,6 +7,7 @@ var path = require('path');
 var main = require('./routes/main');
 var add = require('./routes/add');
 var chart = require('./routes/chart');
+var timeline = require('./routes/timeline');
 // End of setting routes
 
 var app = express();
@@ -27,15 +28,11 @@ const IP = process.env.SERVER_IP || '127.0.0.1';
 // use res.render to load up an ejs view file
 
 // Use pages
-app.use('/', main);
-app.use('/add', add);
-app.use('/chart', chart);
+app.use('/', main);             // First page
+app.use('/add', add);           // Add to istSOS
+app.use('/chart', chart);       // Visualize data
+app.use('/timeline', timeline); // BLockchain history
 // End of pages
-
-// about page
-app.get('/timeline', function(req, res) {
-    res.render('pages/timeline');
-});
 
 app.get('*', (req, res) => {
     res.status(404);

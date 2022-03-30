@@ -13,12 +13,17 @@
 <body>
 
     <div class="container py-4">
-        <header class="pb-3 mb-4 border-bottom">
-            <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
-                <span class="fs-4">Dapp for istSOS</span>
-            </a>
+        <header class="pb-3 pe-3 mb-4 border-bottom">
+            <div class="d-flex justify-content-between align-items-center">
+                <a href="/" class="text-dark text-decoration-none">
+                    <span class="fs-4">Dapp for istSOS</span>                 
+                </a>
+                <a class="text-dark" href="/">
+                    <i class="bi bi-house-door-fill"></i>    
+                </a>
+            </div>        
         </header>
-    
+
         <div class="row align-items-md-stretch">
             <div class="col-md-6">
 
@@ -51,9 +56,11 @@
                             </table> 
                         </div>
 
-                        <button class="btn mt-4 btn-light" type="button" id="btn-select-files">Select files</button>
-                        <input type="file" id="selected-files" name="files" accept=".txt" style="display: none;" multiple>
-                                
+                        <form enctype="multipart/form-data" action="add/upload/image" method="post">
+                            <button class="btn mt-4 btn-light" type="button" id="btn-select-files">Select files</button>
+                            <input type="file" id="selected-files" name="files" accept=".txt" style="display: none;" multiple>
+                        </form>
+                        
                         <button class="btn mt-4 btn-success" type="button" id="btn-submit" disabled="disabled">Submit</button>
                     </div>
 
@@ -85,14 +92,21 @@
         $(document).ready(function() {
             
             var allfiles = []
+            var formData = new FormData();
 
             // Remove a row from table
             $('#table-selected-files').on('click', '.remove', function () {
                 const fileDel = $(this).closest('tr');
                 const curFile = fileDel.get(0).children[1].innerHTML;
-                allfiles.splice(allfiles.indexOf(curFile), 1);
+                
+                for (var i = 0; i < allfiles.length; i++) {
+                    if (allfiles[i].name == curFile) break;
+                    i++;
+                }
+                allfiles.splice(allfiles[i], 1);
                 fileDel.remove();
                 changeSubmit();
+
                 print(allfiles);
             });
 
@@ -102,24 +116,34 @@
             });
 
             $("#selected-files").change(function() {
-                
                 for (var i = 0; i < $(this).get(0).files.length; ++i) {
-                    const fileName = $(this).get(0).files[i].name;
-                    if (allfiles.includes(fileName) == false) {
-                        allfiles.push(fileName);
-
+                    var file = $(this).get(0).files[i]
+                    var fileName = file.name;
+                    var exist = false;
+                    for (var j = 0; j < allfiles.length; j++) {
+                        if (allfiles.length > 0){
+                            if (allfiles[j].name == fileName) {
+                                exist = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (exist == false) {
+                        allfiles.push(file);
+                        
                         // Adding a row inside the tbody.
                         $('#table-selected-files').append(
                             `<tr>
-                            <td>${(allfiles[i]).split('_')[0].toUpperCase()}</td>
-                            <td id="selected-file">${allfiles[i]}</td>
+                            <td>${(file.name).split('_')[0].toUpperCase()}</td>
+                            <td id="selected-file">${file.name}</td>
                             <td>
                                 <button style="all: unset; cursor: pointer;" type="button" class="btn remove"><i class="bi bi-trash"></i></button>
                             </td>
                             </tr>`);
                     }
-                    print(allfiles);
+                    
                 }
+                print(allfiles);
                 changeSubmit();
             });  
             

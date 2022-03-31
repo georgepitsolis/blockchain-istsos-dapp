@@ -56,12 +56,13 @@
                             </table> 
                         </div>
 
-                        <form enctype="multipart/form-data" action="add/upload/image" method="post">
+                        <form action="/add/upload/files" method="post" enctype="multipart/form-data">
                             <button class="btn mt-4 btn-light" type="button" id="btn-select-files">Select files</button>
                             <input type="file" id="selected-files" name="files" accept=".txt" style="display: none;" multiple>
-                        </form>
                         
-                        <button class="btn mt-4 btn-success" type="button" id="btn-submit" disabled="disabled">Submit</button>
+                        
+                            <button class="btn mt-4 btn-success" type="submit" id="btn-submit" disabled="disabled">Submit</button>
+                        </form>
                     </div>
 
                 </div>
@@ -91,51 +92,37 @@
 
         $(document).ready(function() {
             
-            var allfiles = []
-            var formData = new FormData();
+            var allFilesObj = []
 
             // Remove a row from table
             $('#table-selected-files').on('click', '.remove', function () {
                 const fileDel = $(this).closest('tr');
                 const curFile = fileDel.get(0).children[1].innerHTML;
-                
-                for (var i = 0; i < allfiles.length; i++) {
-                    if (allfiles[i].name == curFile) break;
-                    i++;
-                }
-                allfiles.splice(allfiles[i], 1);
+                allFilesObj.splice(search(curFile, allFilesObj), 1);
                 fileDel.remove();
                 changeSubmit();
 
-                print(allfiles);
+                print(allFilesObj);
             });
 
-            // Select 
+            // Select files
             $("#btn-select-files").on('click', function() {
                 $('#selected-files').trigger('click');
             });
 
             $("#selected-files").change(function() {
-                for (var i = 0; i < $(this).get(0).files.length; ++i) {
-                    var file = $(this).get(0).files[i]
-                    var fileName = file.name;
-                    var exist = false;
-                    for (var j = 0; j < allfiles.length; j++) {
-                        if (allfiles.length > 0){
-                            if (allfiles[j].name == fileName) {
-                                exist = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (exist == false) {
-                        allfiles.push(file);
+                for (var i = 0; i < $(this).get(0).files.length; i++) {
+                    var curFile = $(this).get(0).files[i];
+                    var fileName = curFile.name;
+                    
+                    if (search(fileName, allFilesObj) === -1) {
+                        allFilesObj.push(curFile);
                         
                         // Adding a row inside the tbody.
                         $('#table-selected-files').append(
                             `<tr>
-                            <td>${(file.name).split('_')[0].toUpperCase()}</td>
-                            <td id="selected-file">${file.name}</td>
+                            <td>${(curFile.name).split('_')[0].toUpperCase()}</td>
+                            <td id="selected-file">${curFile.name}</td>
                             <td>
                                 <button style="all: unset; cursor: pointer;" type="button" class="btn remove"><i class="bi bi-trash"></i></button>
                             </td>
@@ -143,8 +130,11 @@
                     }
                     
                 }
-                print(allfiles);
+                print(allFilesObj);
                 changeSubmit();
+                this.value = null;
+                
+                console.log('path', allFilesObj[0].val);
             });  
             
             $("#Ip-input").change(function() {
@@ -152,8 +142,41 @@
                 console.log(newIp);
             });
 
+            // $("#btn-submit").on('click', function() {
+                
+            //     allFilesObj.forEach( async function(file) {
+            //         let formData = new FormData();
+            //         formData.append("file", file);
+            //         await fetch('/uploadFiles.php', {
+            //             method: "POST",
+            //             body: formData
+            //         });
+
+            //     });
+            //     // alert('The file has been uploaded successfully.');
+            //     // const xhr = new XMLHttpRequest();
+            //     // xhr.onload = function() {
+            //     //     if (xhr.status >= 200 && xhr.status < 300) {
+            //     //         console.log("Uploaded!!");
+            //     //     }
+            //     // }
+
+            //     // xhr.open('POST', '/add/upload/data', true);
+            //     // xhr.send(formData);
+
+            // });
+
+            function search(name, myArray){
+                for (var i=0; i < myArray.length; i++) {
+                    if (myArray[i].name === name) {
+                        return i;
+                    }
+                }
+                return -1;
+            };
+
             function changeSubmit() {
-                if (allfiles.length != 0) {
+                if (allFilesObj.length != 0) {
                     $("#btn-submit").removeAttr('disabled');
                 }else {
                     $("#btn-submit").attr('disabled', true);

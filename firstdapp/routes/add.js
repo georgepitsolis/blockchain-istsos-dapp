@@ -13,50 +13,42 @@ router.get('/', function(req, res) {
 
 router.post('/upload/files', upload_files);
 
-function upload_files(req, res, next){
-    if(req.method == "POST") {
+async function upload_files(req, res, next){
+    var form = new formidable.IncomingForm();
+    form.multiples = true;
 
-       // create an incoming form object
-       var form = new formidable.IncomingForm();
-       // specify that we want to allow the user to upload multiple files in a single request
-       form.multiples = true;
-       // store all uploads in the /uploads directory
-       console.log("step 1");
-       form.uploadDir = path.basename(path.dirname('./public/uploads/json_files'))
-       // every time a file has been uploaded successfully,
-       // rename it to it's orignal name
-       console.log("step 2");
+    var uploadFolder = path.join(__dirname, "uploads");
+    // console.log("uploadFolder: ", uploadFolder);
 
-       form.on('file', function(field, file) {
-            fs.rename(file.path, path.join(form.uploadDir, file.name), function(err){
-                console.log("step 3"); 
-                if (err) throw err;
-                    console.log('renamed complete: '+file.name);
-                    const file_path = './public/uploads/'+file.name;
-            });
-            console.log(file.name);
-       });
-       console.log("step 4");
+    form.uploadDir = uploadFolder;
+    // console.log("req.body: ",req.body);
 
-       // log any errors that occur
-       form.on('error', function(err) {
-           console.log('An error has occured: \n' + err);
-       });
-       console.log("step 5");
+    // Parsing
+    form.parse(req, async function(err, fields, files) {
+        if (err) {
+        console.log("Error parsing the files");
+        return res.status(400).json({
+            status: "Fail",
+            message: "There was an error parsing the files",
+            error: err,
+        });
+        }
+        
+        const file = files.myFiles;
+        const fileName = file.originalFilename;
+        console.log("file name:", fileName);              
 
-       // once all the files have been uploaded, send a response to the client
-       form.on('end', function() {
-            //res.end('success');
-            res.statusMessage = "Process cashabck initiated";
-            res.statusCode = 200;
-            res.redirect('/')
-            res.end()
-       });
-       console.log("step 6");
+        // renames the file in the directory
+        fs.rename(file.filepath, path.join(uploadFolder, fileName), function(err) {
+            if (err) throw err;
+        });    
+        
+        res.statusMessage = "Process cashabck initiated";
+        res.statusCode = 200;
+        res.end();
+        
+    });
 
-       // parse the incoming request containing the form data
-       form.parse(req);
-     }
  }
 
 module.exports = router;

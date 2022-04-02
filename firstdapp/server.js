@@ -2,6 +2,7 @@ require('dotenv').config();
 var express = require('express');
 var chalk = require('chalk');
 var path = require('path');
+var bodyParser = require("body-parser");
 
 // Set all routes
 var main = require('./routes/main');
@@ -14,7 +15,7 @@ var app = express();
 app.set('view engine', 'ejs');
 app.set('views', './views');
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 const PORT = process.env.SERVER_PORT || 3000;

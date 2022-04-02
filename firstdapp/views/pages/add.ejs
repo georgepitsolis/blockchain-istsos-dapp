@@ -43,7 +43,7 @@
 
                     <div class="p-5 mb-4 text-white bg-dark rounded-3">
                         <div class="table-responsive-sm">
-                            <table class="table table-sm table-dark table-hover">
+                            <table class="table table-sm table-dark table-hover" id="base-table">
                                 <thead>
                                     <tr>
                                         <th>Station name</th>
@@ -55,14 +55,9 @@
                                 </tbody>
                             </table> 
                         </div>
-
-                        <form action="/add/upload/files" method="post" enctype="multipart/form-data">
-                            <button class="btn mt-4 btn-light" type="button" id="btn-select-files">Select files</button>
-                            <input type="file" id="selected-files" name="files" accept=".txt" style="display: none;" multiple>
-                        
-                        
-                            <button class="btn mt-4 btn-success" type="submit" id="btn-submit" disabled="disabled">Submit</button>
-                        </form>
+                        <button class="btn mt-4 btn-light" type="button" id="btn-select-files">Select files</button>
+                        <input type="file" id="selected-files" name="myFiles" accept=".txt" style="display: none;" multiple>
+                        <button class="btn mt-4 btn-success" type="button" id="btn-submit" disabled="disabled">Submit</button>
                     </div>
 
                 </div>
@@ -114,8 +109,7 @@
                 for (var i = 0; i < $(this).get(0).files.length; i++) {
                     var curFile = $(this).get(0).files[i];
                     var fileName = curFile.name;
-                    
-                    if (search(fileName, allFilesObj) === -1) {
+                    if (search(fileName, allFilesObj) === -1){
                         allFilesObj.push(curFile);
                         
                         // Adding a row inside the tbody.
@@ -128,13 +122,10 @@
                             </td>
                             </tr>`);
                     }
-                    
                 }
                 print(allFilesObj);
                 changeSubmit();
                 this.value = null;
-                
-                console.log('path', allFilesObj[0].val);
             });  
             
             $("#Ip-input").change(function() {
@@ -142,29 +133,26 @@
                 console.log(newIp);
             });
 
-            // $("#btn-submit").on('click', function() {
+            $("#btn-submit").on('click', async function() {
+                for (let x = 0; x < allFilesObj.length; x++){
+                    let form_data = new FormData();
+                    form_data.append('myFiles', allFilesObj[x]);
+                    await $.ajax({
+                        'url':'/add/upload/files',
+                        'type':'POST',
+                        'data': form_data,
+                        'contentType': false,
+                        'processData': false
+                    }).catch(e=>console.log(e));
+                }
+
+                allFilesObj = [];
+                changeSubmit();
+                $('#table-selected-files').remove();
+                $('#base-table').append(
+                    `<tbody id="table-selected-files"></tbody>`);
                 
-            //     allFilesObj.forEach( async function(file) {
-            //         let formData = new FormData();
-            //         formData.append("file", file);
-            //         await fetch('/uploadFiles.php', {
-            //             method: "POST",
-            //             body: formData
-            //         });
-
-            //     });
-            //     // alert('The file has been uploaded successfully.');
-            //     // const xhr = new XMLHttpRequest();
-            //     // xhr.onload = function() {
-            //     //     if (xhr.status >= 200 && xhr.status < 300) {
-            //     //         console.log("Uploaded!!");
-            //     //     }
-            //     // }
-
-            //     // xhr.open('POST', '/add/upload/data', true);
-            //     // xhr.send(formData);
-
-            // });
+            });
 
             function search(name, myArray){
                 for (var i=0; i < myArray.length; i++) {
@@ -183,7 +171,7 @@
                 };
             };
 
-            function print(value) {
+            function print(value = "Im here!!") {
                 console.log(value);
             };
         });

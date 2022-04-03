@@ -1,8 +1,8 @@
 require('dotenv').config();
-var express = require('express');
-var formidable = require('formidable');
-var path = require('path');
-var fs = require('fs');
+const express = require('express');
+const formidable = require('formidable');
+const path = require('path');
+const fs = require('fs');
 var router = express.Router();
 
 router.get('/', function(req, res) {
@@ -48,7 +48,31 @@ async function upload_files(req, res, next){
         res.end();
         
     });
+};
 
- }
+router.post('/run/python', run_python_scripts);
+
+async function run_python_scripts(req, res, next) {
+    const { PythonShell } = require('python-shell');
+
+    let options = {
+        mode: 'text',
+        pythonPath: 'python3',
+        pythonOptions: ['-u'], // get print results in real-time
+        scriptPath: '../pythonscripts',
+        args: []
+    };
+
+    PythonShell.run('test.py', options, function(err, results) {
+        if (err) console.log(err);
+        // results is an array consisting of messages collected during execution
+        console.log('results: %j', results);
+    });
+    res.statusMessage = "Process cashabck initiated";
+    res.statusCode = 200;
+    res.end();
+
+};
+
 
 module.exports = router;

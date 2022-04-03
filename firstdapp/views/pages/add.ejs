@@ -33,17 +33,17 @@
                         <h5>Connect to istSOS database</h5>
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing-default">Ip</span>
-                            <input type="text" id="Ip-input" placeholder="<%= process.env.ISTSOS_IP %>" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                            <input type="text" id="input-ip" value="<%= process.env.ISTSOS_IP %>" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                         </div>
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing-default">Db</span>
-                            <input type="text" id="db-input" placeholder="<%= process.env.ISTSOS_DB %>" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                            <input type="text" id="input-db" value="<%= process.env.ISTSOS_DB %>" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                         </div>
                     </div>
 
                     <div class="p-5 mb-4 text-white bg-dark rounded-3">
                         <div class="table-responsive-sm">
-                            <table class="table table-sm table-dark table-hover" id="base-table">
+                            <table class="table table-sm table-dark table-hover" id="table-base">
                                 <thead>
                                     <tr>
                                         <th>Station name</th>
@@ -51,7 +51,8 @@
                                         <th></th>
                                     </tr>
                                 </thead>
-                                <tbody id="table-selected-files">
+                                <tbody id="table-body">
+                                    <tr></tr>
                                 </tbody>
                             </table> 
                         </div>
@@ -87,10 +88,10 @@
 
         $(document).ready(function() {
             
-            var allFilesObj = []
+            var allFilesObj = [];
 
             // Remove a row from table
-            $('#table-selected-files').on('click', '.remove', function () {
+            $('#table-body').on('click', '.remove', function () {
                 const fileDel = $(this).closest('tr');
                 const curFile = fileDel.get(0).children[1].innerHTML;
                 allFilesObj.splice(search(curFile, allFilesObj), 1);
@@ -113,7 +114,7 @@
                         allFilesObj.push(curFile);
                         
                         // Adding a row inside the tbody.
-                        $('#table-selected-files').append(
+                        $('#table-body').append(
                             `<tr>
                             <td>${(curFile.name).split('_')[0].toUpperCase()}</td>
                             <td id="selected-file">${curFile.name}</td>
@@ -128,8 +129,8 @@
                 this.value = null;
             });  
             
-            $("#Ip-input").change(function() {
-                const newIp = $("#Ip-input").val();
+            $("#input-ip").change(function() {
+                const newIp = $("#input-ip").val();
                 console.log(newIp);
             });
 
@@ -148,10 +149,15 @@
 
                 allFilesObj = [];
                 changeSubmit();
-                $('#table-selected-files').remove();
-                $('#base-table').append(
-                    `<tbody id="table-selected-files"></tbody>`);
+                $('#table-body').empty();
+                $('#table-body').append(`<tr></tr>`);  
                 
+                await $.ajax({
+                    'url':'add/run/python',
+                    'type':'POST',
+                    'contentType': false,
+                    'processData': false
+                }).catch(e=>console.log(e));
             });
 
             function search(name, myArray){
@@ -174,6 +180,7 @@
             function print(value = "Im here!!") {
                 console.log(value);
             };
+            
         });
 
         

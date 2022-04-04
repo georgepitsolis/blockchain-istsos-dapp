@@ -20,9 +20,9 @@ try:
     import isodate as iso
     from pytz import timezone
 except ImportError as e:
-    print(f"""{Fore.RED}
-Error loading internal libs:
- >> did you run the script from the istSOS root folder?\n\n{Style.RESET_ALL}""")
+    print("""
+        Error loading internal libs:
+        >> did you run the script from the istSOS root folder?""")
     raise e
 
 datacache = None
@@ -58,7 +58,7 @@ def post_data_on_station(url, service, wd, proc, conf=None):
 
         if data['success'] is False:
             raise Exception(
-                f"{Fore.RED}Description of procedure %s can not be loaded: %s{Style.RESET_ALL}" % (
+                "Description of procedure %s can not be loaded: %s" % (
                     proc, data['message']))
 
         data = data['data']
@@ -82,8 +82,8 @@ def post_data_on_station(url, service, wd, proc, conf=None):
 
         if data['success'] is False:
             raise Exception(
-                f"{Fore.RED}Last observation of procedure %s can not be "
-                f"loaded: %s{Style.RESET_ALL}" % (proc, data['message']))
+                "Last observation of procedure %s can not be "
+                "loaded: %s" % (proc, data['message']))
 
         data = data['data'][0]
         data['AssignedSensorId'] = aid
@@ -118,8 +118,8 @@ def post_data_on_station(url, service, wd, proc, conf=None):
                         continue
                     else:
                         raise Exception(
-                            f"{Fore.RED}Mandatory observed property %s is not present"
-                            f" in the CSV.{Style.RESET_ALL}" % k)
+                            "Mandatory observed property %s is not present"
+                            " in the CSV." % k)
 
                 # Loop lines (skipping header)
                 for i in range(1, len(lines)):
@@ -146,7 +146,7 @@ def post_data_on_station(url, service, wd, proc, conf=None):
 
                     except Exception as e:
                         raise Exception(
-                            f"{Fore.RED}Error in %s line: %s - %s\n%s{Style.RESET_ALL}" % (
+                            "Error in %s line: %s - %s\n%s" % (
                                 f, i, lines[i], str(e)))
 
             dtstr = os.path.split(f)[1].replace("%s_" % proc, "").replace(ext, "")
@@ -175,7 +175,7 @@ def post_data_on_station(url, service, wd, proc, conf=None):
                 if ep > iso.parse_datetime(data["samplingTime"]["endPosition"]):
                     bp = ep
                 else:
-                    raise Exception(f"{Fore.RED}Something is wrong with begin position..{Style.RESET_ALL}")
+                    raise Exception("Something is wrong with begin position..")
 
             data["samplingTime"] = {
                 "beginPosition": bp.isoformat(),
@@ -257,11 +257,11 @@ def post_data_on_station(url, service, wd, proc, conf=None):
                     # Read response
                     res.raise_for_status()
                     if not res.json()['success']:
-                        log(f"{Fore.RED}  > Insert observation success: False{Style.RESET_ALL}")
+                        log("Insert observation success: False")
                         return False, 0
                     else: 
-                        log(f"{Fore.GREEN}  > Insert observation success: True{Style.RESET_ALL}")
-                        log("  > Values: %s" % len(data['result']['DataArray']['values']))
+                        log("Insert observation success: True")
+                        log("Values: %s" % len(data['result']['DataArray']['values']))
 
                 # with open('JSON_files/' + proc + '-' + dtstr + '.json', 'w') as outfile:
                 #     json.dump(data, outfile)

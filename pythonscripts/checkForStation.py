@@ -42,8 +42,8 @@ def check_station_existence(stationNamePath, service_url, cur_db, stations_list,
     stationInfo = find_station_info(stationName, stations_list)
     stationInfo["stationPath"] = stationNamePath
     if stationInfo["stationName"] == "notfound":
-        print(f"{Fore.RED}  > Insert procedure success: False{Style.RESET_ALL}")
-        print(f"{Fore.RED}  > There is no station " + stationName + f" in Meteo's Records.{Style.RESET_ALL}")
+        print("Insert procedure success: False")
+        print("There is no station " + stationName + " in Meteo's Records.")
         return False
     else: 
         # Station information was found and a get request will follow.
@@ -52,9 +52,9 @@ def check_station_existence(stationNamePath, service_url, cur_db, stations_list,
             # Station not exist on istSOS. 
             # Call postStation for adding it.
             postProcedure.post_station(stationInfo, service_url, cur_db, unread_data)
-            print(f"{Fore.GREEN}  > Insert procedure success: True{Style.RESET_ALL}")
+            print("Insert procedure success: True")
         else: 
-            print(f"{Fore.GREEN}  > Procedure already exist on istSOS{Style.RESET_ALL}")
+            print("Procedure already exist on istSOS")
         return True
 
 # check_station_existence("unread_data\\HAROKOPIO-ATHENS_20220225101000.txt", "http://192.168.2.11/istsos/", "demo", "external_data/stations_list.txt", "unread_data/")

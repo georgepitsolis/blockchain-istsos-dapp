@@ -27,7 +27,7 @@ def postMain(uploadsD=None):
         convertData.convert_data_from_files(takePrimitiveD, unreadD, None)
     else: 
         convertData.convert_data_from_files(uploadsD, unreadD, True)
-
+    
     csvData = glob.glob(unreadD + "*.txt")
 
     # Ready to input Station and Data to istSOS
@@ -36,16 +36,15 @@ def postMain(uploadsD=None):
         stationName = file.split('/')[-1].split("_")[0]
         # Check for station existence in istSOS. 
         # If there is not any like station POST a new one
-        print("\n--> Start " + stationName)
+        print(stationName)
         if checkForStation.check_station_existence(file, url, db, stations, unreadD):
             insert, value = postData.post_data_on_station(url[:-1], db, unreadD[:-1], stationName)
             values += value
             if insert == True:
                 shutil.move(file, readD + file.split('/')[-1])
-        print("--> End " + stationName)
 
-    print("\n--> Total time (sec): %s" % round(time.time() - start_time, 2))
-    print("--> Total values:     %s" % values)
+    # print("Total time (sec): %s" % round(time.time() - start_time, 2))
+    # print("Total values:     %s" % values)
 
 if __name__ == "__main__":
     postMain()

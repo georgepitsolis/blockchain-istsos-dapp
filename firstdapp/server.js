@@ -2,7 +2,8 @@ require('dotenv').config();
 var express = require('express');
 var chalk = require('chalk');
 var path = require('path');
-var bodyParser = require("body-parser");
+const flash = require('connect-flash');
+const session = require('express-session');
 
 // Set all routes
 var main = require('./routes/main');
@@ -14,8 +15,16 @@ var timeline = require('./routes/timeline');
 var app = express();
 app.set('view engine', 'ejs');
 app.set('views', './views');
+
+app.use(flash());
+app.use(session({
+    secret: "ThisShouldBeSecret",
+    resave: true,
+    saveUninitialized: true
+}));
+
 app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 const PORT = process.env.SERVER_PORT || 3000;

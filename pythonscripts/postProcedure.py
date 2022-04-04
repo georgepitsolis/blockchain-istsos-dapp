@@ -11,7 +11,7 @@ with open("../pythonscripts/external-data/units-cfg.yml", "r") as ymlfile:
 def rest_request(url, json_data):
     r = requests.post(url, data=json.dumps(json_data))
     if not r.json()['success']:
-        print(f"{Fore.RED}  > Problem with {Style.RESET_ALL}", json_data['system_id'])
+        print("Problem with ", json_data['system_id'])
         print(r.json())
 
 def find_sensors(stInfo, path):

@@ -3,17 +3,22 @@ const express = require('express');
 const formidable = require('formidable');
 const path = require('path');
 const fs = require('fs');
+const { resolve } = require('dns');
 var router = express.Router();
 
 router.get('/', function(req, res) {
+    let messages = req.flash("messages");
+    if (messages.length == 0) messages = [];
+
     res.render('pages/add', {
-        title: 'Add files page'
+        title: 'Add files page',
+        messages: messages
     });
 });
 
 router.post('/upload/files', upload_files);
 
-async function upload_files(req, res, next){
+function upload_files(req, res, next){
     var form = new formidable.IncomingForm();
     form.multiples = true;
 
@@ -24,7 +29,7 @@ async function upload_files(req, res, next){
     // console.log("req.body: ",req.body);
 
     // Parsing
-    form.parse(req, async function(err, fields, files) {
+    form.parse(req, function(err, fields, files) {
         if (err) {
         console.log("Error parsing the files");
         return res.status(400).json({
@@ -41,19 +46,9 @@ async function upload_files(req, res, next){
         // renames the file in the directory
         fs.rename(file.filepath, path.join(uploadFolder, fileName), function(err) {
             if (err) throw err;
-        });    
-        
-        res.statusMessage = "Process cashabck initiated";
-        res.statusCode = 200;
-        res.redirect('/');
-        res.end();
-        
+        });          
     });
-};
 
-router.post('/run/python', run_python_scripts);
-
-async function run_python_scripts(req, res, next) {
     const { PythonShell } = require('python-shell');
 
     let options = {
@@ -64,22 +59,16 @@ async function run_python_scripts(req, res, next) {
         args: []
     };
 
-    PythonShell.run('postMain.py', options, async function(err, results) {
+    PythonShell.run('postMain.py', options, function(err, results) {
         if (err) console.log(err);
-        // results is an array consisting of messages collected during execution
-
-        outputconsole.Value = results;
         console.log('results: %j', results);
 
-        
+        res.status(200).send({result: results});
     });
 
-    res.statusMessage = "Process cashabck initiated";
-    res.statusCode = 200;
-    res.redirect('/');
-    res.end();
+    // req.flash("messages", {value: "Its OK!!!"});
+    // res.redirect('/add'); 
 
 };
-
 
 module.exports = router;

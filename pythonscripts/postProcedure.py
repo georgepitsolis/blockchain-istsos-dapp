@@ -5,7 +5,7 @@ import json
 from colorama import Fore, Style
 import yaml
 
-with open("./pythonscripts/external_data/units_cfg.yml", "r") as ymlfile:
+with open("../pythonscripts/external-data/units-cfg.yml", "r") as ymlfile:
     units = yaml.safe_load(ymlfile)
 
 def rest_request(url, json_data):

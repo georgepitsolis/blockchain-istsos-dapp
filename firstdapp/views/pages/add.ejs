@@ -33,11 +33,11 @@
                         <h5>Connect to istSOS database</h5>
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing-default">Ip</span>
-                            <input type="text" id="input-ip" value="<%= process.env.ISTSOS_IP %>" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                            <input type="text" id="input-ip" value="<%= process.env.ISTSOS_IP %>" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" disabled>
                         </div>
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing-default">Db</span>
-                            <input type="text" id="input-db" value="<%= process.env.ISTSOS_DB %>" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                            <input type="text" id="input-db" value="<%= process.env.ISTSOS_DB %>" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" disabled>
                         </div>
                     </div>
 
@@ -67,9 +67,11 @@
 
             <div class="col-md-6">
                 <div class="h-100 p-5 bg-light rounded-3">
-                    <h2>Blockchain history</h2>
-                    <p>All previous additions which have been applied on blockchain</p>
-                    <a class="btn btn-outline-dark" type="button" id="btn-timeline" href="/timeline"><i class="bi bi-clock-history"></i> Timeline</a>
+                    <h2>Console Output</h2>
+                    <p id="output-console">
+
+
+                    </p>
                 </div>                
             </div>
         </div>
@@ -97,8 +99,7 @@
                 allFilesObj.splice(search(curFile, allFilesObj), 1);
                 fileDel.remove();
                 changeSubmit();
-
-                print(allFilesObj);
+                // print(allFilesObj);
             });
 
             // Select files
@@ -124,15 +125,10 @@
                             </tr>`);
                     }
                 }
-                print(allFilesObj);
+                // print(allFilesObj);
                 changeSubmit();
                 this.value = null;
             });  
-            
-            $("#input-ip").change(function() {
-                const newIp = $("#input-ip").val();
-                console.log(newIp);
-            });
 
             $("#btn-submit").on('click', async function() {
                 for (let x = 0; x < allFilesObj.length; x++){
@@ -151,13 +147,16 @@
                 changeSubmit();
                 $('#table-body').empty();
                 $('#table-body').append(`<tr></tr>`);  
-                
+            
                 await $.ajax({
                     'url':'add/run/python',
                     'type':'POST',
                     'contentType': false,
                     'processData': false
                 }).catch(e=>console.log(e));
+
+                $("#output-console").innerHTML = "<%= output %>";
+
             });
 
             function search(name, myArray){
@@ -182,9 +181,6 @@
             };
             
         });
-
-        
-
 
     </script>
 </body>

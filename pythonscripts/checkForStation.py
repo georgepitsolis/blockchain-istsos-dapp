@@ -38,7 +38,7 @@ def find_station_info(staionN, stations_list):
 
 
 def check_station_existence(stationNamePath, service_url, cur_db, stations_list, unread_data):
-    stationName = stationNamePath.split('\\')[1].split("_")[0]
+    stationName = stationNamePath.split('/')[-1].split("_")[0]
     stationInfo = find_station_info(stationName, stations_list)
     stationInfo["stationPath"] = stationNamePath
     if stationInfo["stationName"] == "notfound":

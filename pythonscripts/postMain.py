@@ -1,41 +1,39 @@
 # -*- coding: utf-8 -*-
 import glob
+import os
 import checkForStation
 import convertData
 import postData
 import shutil
-from colorama import Fore, Style
-import yaml
 import time
+from dotenv import load_dotenv
+load_dotenv("../firstdapp/.env")
 
-def postMain(primitiveD=None):
+def postMain(uploadsD=None):
     start_time = time.time()
 
-    with open("external_data/config.yml", "r") as ymlfile:
-        cfg = yaml.safe_load(ymlfile)
-
     # For any changes you can go to config.yml
-    url = cfg["istsos"]["url"]
-    db = cfg["istsos"]["db"]
+    url = os.getenv("ISTSOS_URL")
+    db = os.getenv("ISTSOS_DB")
 
-    unreadD = cfg["paths"]["unread"]
-    readD = cfg["paths"]["read"]
+    unreadD = os.getenv("PATH_UNREAD")
+    readD = os.getenv("PATH_READ")
 
-    stations = cfg["meteo"]["stations"]
+    stations = os.getenv("METEO_STATIONS")
 
-    if primitiveD == None:
-        primitiveD = cfg["paths"]["primitive"]
-        takePrimitiveD = primitiveD + "*.txt"
+    if uploadsD == None:
+        uploadsD = os.getenv("PATH_UPLOADS")
+        takePrimitiveD = uploadsD + "*.txt"
         convertData.convert_data_from_files(takePrimitiveD, unreadD, None)
     else: 
-        convertData.convert_data_from_files(primitiveD, unreadD, True)
+        convertData.convert_data_from_files(uploadsD, unreadD, True)
 
     csvData = glob.glob(unreadD + "*.txt")
 
     # Ready to input Station and Data to istSOS
     values = 0
     for file in csvData:
-        stationName = file.split('\\')[1].split("_")[0]
+        stationName = file.split('/')[-1].split("_")[0]
         # Check for station existence in istSOS. 
         # If there is not any like station POST a new one
         print("\n--> Start " + stationName)
@@ -43,7 +41,7 @@ def postMain(primitiveD=None):
             insert, value = postData.post_data_on_station(url[:-1], db, unreadD[:-1], stationName)
             values += value
             if insert == True:
-                shutil.move(file, readD + file.split('\\')[1])
+                shutil.move(file, readD + file.split('/')[-1])
         print("--> End " + stationName)
 
     print("\n--> Total time (sec): %s" % round(time.time() - start_time, 2))

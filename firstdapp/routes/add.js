@@ -45,6 +45,7 @@ async function upload_files(req, res, next){
         
         res.statusMessage = "Process cashabck initiated";
         res.statusCode = 200;
+        res.redirect('/');
         res.end();
         
     });
@@ -63,13 +64,19 @@ async function run_python_scripts(req, res, next) {
         args: []
     };
 
-    PythonShell.run('test.py', options, function(err, results) {
+    PythonShell.run('postMain.py', options, async function(err, results) {
         if (err) console.log(err);
         // results is an array consisting of messages collected during execution
+
+        outputconsole.Value = results;
         console.log('results: %j', results);
+
+        
     });
+
     res.statusMessage = "Process cashabck initiated";
     res.statusCode = 200;
+    res.redirect('/');
     res.end();
 
 };

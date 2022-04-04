@@ -5,3 +5,6 @@ bnet/node1/geth/chaindata/
 bnet/node1/geth/lightchaindata/
 bnet/node1/geth/nodes/
 bnet/node1/geth/triecache/
+
+pythonscripts/__pycache__/
+

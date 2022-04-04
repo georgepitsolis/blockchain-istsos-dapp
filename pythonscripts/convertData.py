@@ -4,7 +4,7 @@ import yaml
 import re
 import os
 
-with open("external_data/units_cfg.yml", "r") as ymlfile:
+with open("../pythonscripts/external-data/units-cfg.yml", "r") as ymlfile:
     units = yaml.safe_load(ymlfile)
 
 wind_dir = {
@@ -133,7 +133,7 @@ def convert_data_from_files(primitive_data, unread_data, conf=None):
 		f.close()
 
 		# Create the converted and unreaded data file
-		if conf == None:
+		if conf != None:
 			nameD = file.split("\\")[1].split(".")[0].upper()
 		else:
 			nameD = file.split("/")[-1].split(".")[0].upper()
@@ -143,6 +143,6 @@ def convert_data_from_files(primitive_data, unread_data, conf=None):
 			unread.write(','.join(row) + '\n')
 		unread.close()
 
-		# os.remove(file)
+		os.remove(file)
 
-# convert_data_from_files("primitive_data/*.txt", "unread_data/")
+# convert_data_from_files("./pythonscripts/primitive_data/*.txt", "./pythonscripts/unread_data/")

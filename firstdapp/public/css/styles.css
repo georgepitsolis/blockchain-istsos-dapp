@@ -1,0 +1,8 @@
+#main-container {
+    background-color: var(--bs-indigo); 
+}
+
+#output-console {
+    height: 200px;
+    overflow-y: scroll;
+}

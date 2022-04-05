@@ -8,7 +8,7 @@
     <title><%= title %></title>
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css"> 
 </head>
 
 <body>
@@ -67,8 +67,10 @@
             </div>
 
             <div class="col-md-6">
-                <div id="output-console" class="h-100 p-5 bg-light rounded-3">
+                <div class="h-100 p-5 bg-light rounded-3">
                     <h2 class="mb-4">Console Output</h2>
+                    <div id="output-console"></div> 
+                    <!-- style="height: 400px; overflow-y: scroll; padding-right: 5px;" -->
                 </div>                
             </div>
         </div>
@@ -142,8 +144,8 @@
                                 for (var i=1; i<res.result.length; i++) {
                                     msg += res.result[i] + '<br>';
                                 }
-                                $("#output-console").append(
-                                    `<div class="mb-5 card text-white bg-success rounded-3">
+                                $("#output-console").prepend(
+                                    `<div class="mb-5 card text-white bg-success bg-opacity-40 rounded-3">
                                         <h5 class="p-3 card-header">${station}</h5>
                                         <div class="card-body">
                                             <p class="card-text">${msg}</p>
@@ -152,8 +154,8 @@
                             }else {
                                 station = res.result[1].split('/').pop().split('.')[0].toUpperCase();
                                 msg = 'An error was occured.<br>This file did not added to istSOS.'
-                                $("#output-console").append(
-                                    `<div class="mb-5 card text-white bg-danger rounded-3">
+                                $("#output-console").prepend(
+                                    `<div class="mb-5 card text-white bg-danger bg-opacity-40 rounded-3">
                                         <h5 class="p-3 card-header">${station}</h5>
                                         <div class="card-body">
                                             <p class="card-text">${msg}</p>

@@ -61,14 +61,9 @@ function upload_files(req, res, next){
 
     PythonShell.run('postMain.py', options, function(err, results) {
         if (err) console.log(err);
-        console.log('results: %j', results);
-
+        // console.log('results: %j', results);
         res.status(200).send({result: results});
     });
-
-    // req.flash("messages", {value: "Its OK!!!"});
-    // res.redirect('/add'); 
-
 };
 
 module.exports = router;

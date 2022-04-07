@@ -1,10 +1,8 @@
 temp/node_modules/
 temp/client/dist/
 temp/build/contracts/
-bnet/node1/geth/chaindata/
-bnet/node1/geth/lightchaindata/
-bnet/node1/geth/nodes/
-bnet/node1/geth/triecache/
+bnet/node1/geth/
+bnet/node2/geth/
 
 pythonscripts/__pycache__/
 

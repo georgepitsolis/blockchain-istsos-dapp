@@ -1,8 +1,8 @@
 temp/node_modules/
 temp/client/dist/
 temp/build/contracts/
-bnet/node1/geth/
-bnet/node2/geth/
+/bnet/node1/
+/bnet/node2/
 
 pythonscripts/__pycache__/
 

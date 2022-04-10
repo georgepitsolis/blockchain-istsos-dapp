@@ -1,8 +1,9 @@
-temp/node_modules/
-temp/client/dist/
-temp/build/contracts/
-bnet/node1/
-bnet/node2/
+temp/*
 
-pythonscripts/__pycache__/
+bnet/node1/*
+bnet/node2/*
+
+firstdapp/node_modules/*
+
+pythonscripts/__pycache__/*
 

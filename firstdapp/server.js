@@ -4,6 +4,7 @@ var chalk = require('chalk');
 var path = require('path');
 const flash = require('connect-flash');
 const session = require('express-session');
+const { web3Object } = require('./utils/web3');
 
 // Set all routes
 var main = require('./routes/main');

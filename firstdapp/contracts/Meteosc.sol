@@ -18,6 +18,7 @@ contract Meteosc {
     //kathe name ASIGONIA_20221010 antistixoi se allo struct file
     mapping(string => mapping(string => File[])) public file;
     mapping(string => string[]) public info;
+    string[] stationNames;
 
     constructor () {
         addFile("ASI_1", "ASI", "2022/11/10", "2022/12/10", "fisrt_data");
@@ -56,6 +57,10 @@ contract Meteosc {
             info[name].push(fullName);
         }
 
+        if (name not in stationNames) {
+            stationNames.push(name);
+        }
+
         file[name][fullName].push(curfile);
     }
 
@@ -84,6 +89,14 @@ contract Meteosc {
             cur[i].period = curFile;
         }
         return cur;
+    }
+
+    function getAllFiles(
+    )public view returns (Station[] memory) {
+        Station[] memory cur = new Station[](len);
+        for (uint i=0; i<info.length; i++) {
+
+        }
     }
 
 }

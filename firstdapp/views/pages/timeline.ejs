@@ -1,1 +1,136 @@
-<h1>Timeline</h1>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <!-- <meta http-equiv="refresh" content="5"> -->
+    <title>
+        <%= title %>
+    </title>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+</head>
+
+<body>
+
+    <div class="container py-4">
+        <header class="pb-3 pe-3 mb-4 border-bottom">
+            <div class="d-flex justify-content-between align-items-center">
+                <a href="/" class="text-dark text-decoration-none">
+                    <span class="fs-4">Dapp for istSOS</span>
+                </a>
+                <a class="text-dark" href="/">
+                    <i class="bi bi-house-door-fill"></i>
+                </a>
+            </div>
+        </header>
+
+        <div class="container py-4">
+            <div class="accordion" id="accordion-base">
+            </div>
+        </div>
+
+        <footer class="pt-3 mt-4 text-muted border-top">
+            Copyright &copy; 2022 Giorgos Pitsolis ECE NTUA
+        </footer>
+
+    </div>
+
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            addStation("ASI", <%- JSON.stringify(data) %>);
+
+            function addStation(stationName, stationAddOns) {
+                var headingSt = "heading-" + stationName;
+                var accordionSt = "accordion-" + stationName;
+                var bodySt = "body-accordion-" + stationName;
+                $("#accordion-base").append(`
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="${headingSt}">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${accordionSt}" aria-expanded="true" aria-controls="${accordionSt}">
+                                ${stationName}
+                            </button>
+                        </h2>
+                        <div id="${accordionSt}" class="accordion-collapse collapse" aria-labelledby="${headingSt}">
+                        <div class="accordion-body" id="${bodySt}">
+                        </div>
+                        </div>
+                    </div>`
+                );
+
+                for (var i = 0; i < stationAddOns.length; i++) {
+                    addStationDay(bodySt, stationAddOns[i][0][0], stationAddOns[i]);
+                }
+            }
+
+            function addStationDay(bodySt, dayName, dayAddOns) {
+                var headingDay = "heading-" + dayName;
+                var accordionDay = "accordion-" + dayName;
+                var bodyDay = "body-accordion-" + dayName;
+                // console.log(bodyDay, dayName, dayAddOns);
+                $("#" + bodySt).prepend(`
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="${headingDay}">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${accordionDay}" aria-expanded="true" aria-controls="${accordionDay}">
+                                ${dayName}
+                            </button>
+                        </h2>
+                        <div id="${accordionDay}" class="accordion-collapse collapse" aria-labelledby="${headingDay}">
+                        <div class="accordion-body" id="${bodyDay}">
+                        </div>
+                        </div>
+                    </div>`
+                );
+
+                for (var i = 0; i < dayAddOns.length; i++) {
+                    addDayVersion(bodyDay, dayAddOns[i][0] + "-" + (i + 1), dayAddOns[i], i + 1);
+                }
+            }
+
+            function addDayVersion(bodyDay, versionName, versionAddOns, ver) {
+                var headingVer = "heading-" + versionName;
+                var accordionVer = "accordion-" + versionName;
+                var bodyVer = "body-accordion-" + versionName;
+                // console.log(bodyVer, versionName, versionAddOns);
+                $("#" + bodyDay).prepend(`
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="${headingVer}">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${accordionVer}" aria-expanded="true" aria-controls="${accordionVer}">
+                                v${ver}. ${versionName}
+                            </button>
+                        </h2>
+                        <div id="${accordionVer}" class="accordion-collapse collapse" aria-labelledby="${headingVer}">
+                        <div class="accordion-body" id="${bodyVer}">
+                            <table class="table">
+                                <thead><tr>
+                                    <th>Hash value</th>
+                                    <th>First measure</th>
+                                    <th>Last measure</th>
+                                </tr></thead>
+                                <tbody><tr>
+                                    <td>${versionAddOns[3]}</td>
+                                    <td>${versionAddOns[4]}</td>
+                                    <td>${versionAddOns[2]}</td>
+                                </tr></tbody>
+                            </table>
+                        </div>
+                        </div>
+                    </div>`
+                );
+            }
+        });
+
+    </script>
+</body>
+
+</html>

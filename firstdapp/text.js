@@ -33,7 +33,7 @@ class w3 {
     }
  
     async initContractGrades() {
-        const meteoArtifact = fs.readFileSync(__dirname + '/../bnet/build/contracts/Meteosc.json', { encoding: "utf-8" });
+        const meteoArtifact = fs.readFileSync(__dirname + '/build/contracts/Meteosc.json', { encoding: "utf-8" });
         this.contracts.meteo = TruffleContract(JSON.parse(meteoArtifact));
  
         this.contracts.meteo.setProvider(this.web3Provider);
@@ -46,9 +46,11 @@ class w3 {
             return instance.getFileHistory.call("ASI", { from: web3Object.account });
         })
         .then(stationMesures => {
+            var allData = [];
             for (let el of stationMesures) {
-                console.log(el.period)
+                allData.push(el.period);
             }
+            console.log(allData);
         });
 
     }

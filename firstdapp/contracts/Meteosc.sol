@@ -4,21 +4,27 @@ pragma solidity >=0.4.22 <0.9.0;
 contract Meteosc {
 
     struct File {
-        string _fullName;
         string _name;
+        string _fullName;
         string _firstMesure;
         string _lastMesure;
         string _data;
     }
 
-    struct Station {
-        File[] period;
+    struct Days {
+        string _fullName;
+        File[] _days;
+    }
+
+    struct Global {
+        string _name;
+        Days[] _stations;
     }
 
     //kathe name ASIGONIA_20221010 antistixoi se allo struct file
     mapping(string => mapping(string => File[])) public file;
     mapping(string => string[]) public info;
-    string[] stationNames;
+    string[] public stationNames;
 
     constructor () {
         addFile("ASI_1", "ASI", "2022/11/10", "2022/12/10", "fisrt_data");
@@ -53,12 +59,12 @@ contract Meteosc {
         curfile._lastMesure = lastMesure;
         curfile._data = data;
 
+        if (info[name].length == 0) {
+            stationNames.push(name);
+        }
+        
         if (file[name][fullName].length == 0) {
             info[name].push(fullName);
-        }
-
-        if (name not in stationNames) {
-            stationNames.push(name);
         }
 
         file[name][fullName].push(curfile);
@@ -80,23 +86,27 @@ contract Meteosc {
 
     function getFileHistory(
         string memory name
-    )public view returns (Station[] memory) {
-        uint len = info[name].length;
-        Station[] memory cur = new Station[](len);
-        for (uint i=0; i<len; i++) {
+    )public view returns (Days[] memory) {
+        uint lenInfo = info[name].length;
+        Days[] memory curD = new Days[](lenInfo);
+        for (uint i=0; i<lenInfo; i++) {
             File[] memory curFile = getFileVertions(name, info[name][i]);
-
-            cur[i].period = curFile;
+            curD[i]._days = curFile;
+            curD[i]._fullName = info[name][i];
         }
-        return cur;
+        return curD;
     }
 
     function getAllFiles(
-    )public view returns (Station[] memory) {
-        Station[] memory cur = new Station[](len);
-        for (uint i=0; i<info.length; i++) {
-
+    )public view returns (Global[] memory) {
+        uint lenSt = stationNames.length;
+        Global[] memory curS = new Global[](lenSt);
+        for (uint i=0; i<lenSt; i++) {
+            Days[] memory curFile = getFileHistory(stationNames[i]);
+            curS[i]._stations = curFile;
+            curS[i]._name = stationNames[i];
         }
+        return curS;
     }
 
 }

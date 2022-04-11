@@ -6,15 +6,16 @@ router.get('/', function(req, res) {
 
     web3Object.contracts.meteo.deployed()
         .then(instance => {
-            return instance.getFileHistory.call("ASI", { from: web3Object.account });
+            return instance.getAllFiles.call({ from: web3Object.account });
         })
         .then(stationMesures => {
             var allData = [];
-            for (let el of stationMesures) {
-                allData.push(el.period);
+            for (let st of stationMesures) {
+                allData.push(st);
             }
             res.render('pages/timeline', {
                 title: "Blockchain history",
+                station: 'Asigonia',
                 data: allData
             });
         });

@@ -43,14 +43,7 @@ class w3 {
     async run() {
         web3Object.contracts.meteo.deployed()
         .then(instance => {
-            return instance.getFileHistory.call("ASI", { from: web3Object.account });
-        })
-        .then(stationMesures => {
-            var allData = [];
-            for (let el of stationMesures) {
-                allData.push(el.period);
-            }
-            console.log(allData);
+            return instance.addFile.sendTransaction("CRE_1", "CRE", "first_data", "2022/01/01", "2022/02/02", { from: web3Object.account });
         });
 
     }

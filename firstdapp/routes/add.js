@@ -12,6 +12,7 @@ router.get('/', function(req, res) {
 
     res.render('pages/add', {
         title: 'Add files page',
+        station: 'Asigonia',
         messages: messages
     });
 });

@@ -1,9 +1,63 @@
-#main-container {
-    background-color: var(--bs-indigo); 
+:root {
+    --main-gradient: linear-gradient(to bottom right, #e9cdd9 0%, #b8cde6 100%);
+    --main-gradient-revert: linear-gradient(to bottom right, #b8cde6 0%, #e9cdd9 100%);
 }
 
+/* main.ejs */
+#div-add-to-istsos {
+    background: var(--main-gradient);
+    color: black;
+}
 
+#div-blockchain-history {
+    background: var(--main-gradient-revert);
+    color: black;
+}
+
+#div-visualize-data {
+    background: var(--bs-dark);
+    color: white;
+}
+ /* add.ejs */
+ #div-output-console {
+     background: var(--main-gradient);
+     color: black;
+ }
+
+ #div-connect {
+    background: var(--bs-dark);
+    color: white;
+}
+
+#div-select {
+    background: var(--bs-dark);
+    color: white;
+}
 /* timeline.ejs */
-#accordion-base {
-    
+.accordion-item {
+    border: none;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    background: none;
+}
+
+.accordion-item .accordion-header button.accordion-button {
+    background: #333435;
+    color: white;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 2;
+    border-radius: 0.2rem;
+    text-decoration: none;
+}
+
+.accordion-header {
+    border-bottom: none;
+    background: transparent;
+    padding: 0px;
+    margin: 2px;
+}
+
+.accordion-button:after {
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23ffffff'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>") !important;
 }

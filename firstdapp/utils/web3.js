@@ -32,7 +32,7 @@ class w3 {
         })
     }
  
-    async initContractGrades() {
+    async initContractMeteo() {
         const meteoArtifact = fs.readFileSync(__dirname + '/../build/contracts/Meteosc.json', { encoding: "utf-8" });
         this.contracts.meteo = TruffleContract(JSON.parse(meteoArtifact));
  
@@ -47,7 +47,7 @@ async function start() {
         web3Object = new w3();
         await web3Object.initWeb3();
         await web3Object.initAccount();
-        await web3Object.initContractGrades();
+        await web3Object.initContractMeteo();
     }
 }
  

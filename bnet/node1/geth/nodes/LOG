@@ -160,3 +160,16 @@
 11:01:25.588965 table@remove removed @29
 14:35:46.564842 db@close closing
 14:35:46.565026 db@close done T·180.225µs
+=============== Apr 11, 2022 (EEST) ===============
+16:43:39.479303 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+16:43:39.480639 version@stat F·[0 1] S·625B[0B 625B] Sc·[0.00 0.00]
+16:43:39.480657 db@open opening
+16:43:39.480713 journal@recovery F·1
+16:43:39.487516 journal@recovery recovering @34
+16:43:39.501467 memdb@flush created L0@37 N·6069 S·57KiB "loc..seq,v12869":"n:\x8f..ong,v12903"
+16:43:39.508263 version@stat F·[1 1] S·57KiB[57KiB 625B] Sc·[0.25 0.00]
+16:43:39.511999 db@janitor F·5 G·1
+16:43:39.512005 db@janitor removing table-33
+16:43:39.512030 db@open done T·31.370363ms
+22:01:14.129346 db@close closing
+22:01:14.129390 db@close done T·43.98µs

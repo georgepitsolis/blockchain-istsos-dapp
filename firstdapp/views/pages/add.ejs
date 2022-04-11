@@ -22,7 +22,7 @@
 
                 <div class="col align-items-md-stretch">
 
-                    <div class="p-5 mb-4 text-white bg-dark rounded-3">
+                    <div class="p-5 mb-4 rounded-3" id="div-connect">
                         <h5>Connect to istSOS database</h5>
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing-default">Ip</span>
@@ -34,7 +34,7 @@
                         </div>
                     </div>
 
-                    <div class="p-5 mb-4 text-white bg-dark rounded-3">
+                    <div class="p-5 mb-4 rounded-3" id="div-select">
                         <div class="table-responsive-sm">
                             <table class="table table-sm table-dark table-hover" id="table-base">
                                 <thead>
@@ -59,7 +59,7 @@
             </div>
 
             <div class="col-md-6">
-                <div class="h-100 p-5 bg-light rounded-3">
+                <div class="h-100 p-5 bg-light rounded-3" id="div-output-console">
                     <h2 class="mb-4">Console Output</h2>
                     <div id="output-console"></div> 
                     <!-- style="height: 400px; overflow-y: scroll; padding-right: 5px;" -->
@@ -67,9 +67,7 @@
             </div>
         </div>
     
-        <footer class="pt-3 mt-4 text-muted border-top">
-            Copyright &copy; 2022 Giorgos Pitsolis ECE NTUA
-        </footer>
+        <%- include("../partials/footer.ejs")%>
 
     </div>
 

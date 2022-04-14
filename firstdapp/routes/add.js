@@ -7,26 +7,13 @@ const fs = require('fs');
 const { resolve } = require('dns');
 var router = express.Router();
 
-var stationInfo = '';
-function getStationInfo(){
-    return new Promise(cur => {
-        web3Object.contracts.meteo.deployed()
-            .then(instance => {
-                return instance.getStationInfo.call({ from: web3Object.account });
-            }).then(info => {
-                stationInfo = info;
-            });
-    }) 
-}
-
 router.get('/', function(req, res) {
-    getStationInfo();
     let messages = req.flash("messages");
     if (messages.length == 0) messages = [];
 
     res.render('pages/add', {
         title: 'Add files page',
-        station: stationInfo.charAt(0) + stationInfo.slice(1).toLowerCase(),
+        station: "Hello",
         messages: messages
     });
 });
@@ -38,10 +25,7 @@ function upload_files(req, res, next){
     form.multiples = true;
 
     var uploadFolder = path.join(__dirname, "uploads");
-    // console.log("uploadFolder: ", uploadFolder);
-
     form.uploadDir = uploadFolder;
-    // console.log("req.body: ",req.body);
 
     // Parsing
     form.parse(req, function(err, fields, files) {

@@ -38,8 +38,6 @@
     <script>
 
         $(document).ready(function () {
-            // addStation("ASI", <%- JSON.stringify(data) %>);
-            // console.log(<%- JSON.stringify(data) %>);
             globalAddOns = '<%- JSON.stringify(data) %>';
             globalAddOns = JSON.parse(globalAddOns);
             for (var i = 0; i < globalAddOns.length; i++) {
@@ -97,7 +95,6 @@
                 var headingVer = "heading-" + versionName;
                 var accordionVer = "accordion-" + versionName;
                 var bodyVer = "body-accordion-" + versionName;
-                // console.log(bodyVer, versionName, versionAddOns);
                 $("#" + bodyDay).prepend(`
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="${headingVer}">

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import re
 import sys
 import os
 from os import path
@@ -9,7 +10,7 @@ from datetime import datetime
 from datetime import timedelta
 import copy
 import urllib3
-from colorama import Fore, Style
+import hashlib
 urllib3.disable_warnings()
 
 sys.path.insert(0, path.abspath("."))
@@ -106,6 +107,7 @@ def post_data_on_station(url, service, wd, proc, conf=None):
         if len(files) > 0:
             for f in files:
                 file = open(f, 'r')
+
                 lines = file.readlines()
                 obsindex = lines[0].strip(' \t\n\r').split(",")
 
@@ -149,6 +151,16 @@ def post_data_on_station(url, service, wd, proc, conf=None):
                             "Error in %s line: %s - %s\n%s" % (
                                 f, i, lines[i], str(e)))
 
+                file.close()
+                # Preparation for Blockchain
+                file = open(f, 'rb')
+                bytes = file.read() # read entire file as bytes
+                readable_hash = hashlib.sha256(bytes).hexdigest()
+                file.close()
+                # Hash is ready
+                
+
+            fullName = os.path.split(f)[1].replace(ext, "")
             dtstr = os.path.split(f)[1].replace("%s_" % proc, "").replace(ext, "")
             offset = False
 
@@ -253,13 +265,13 @@ def post_data_on_station(url, service, wd, proc, conf=None):
                             "Observation": data
                         })
                     )
-
                     # Read response
                     res.raise_for_status()
                     if not res.json()['success']:
                         log("Insert observation success: False")
                         return False, 0
-                    else: 
+                    else:
+                        log("data@%s@%s@%s@%s@%s" % (fullName, data['name'], readable_hash, data['samplingTime']['beginPosition'], data['samplingTime']['endPosition']))
                         log("Insert observation success: True")
                         log("Values: %s" % len(data['result']['DataArray']['values']))
 

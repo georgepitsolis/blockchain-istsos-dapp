@@ -1,5 +1,5 @@
 :root {
-    --main-gradient: linear-gradient(to bottom right, #e9cdd9 0%, #b8cde6 100%);
+    --main-gradient: linear-gradient(to bottom right, #e9cdd9c7 0%, #b8cde6cc 100%);
     --main-gradient-revert: linear-gradient(to bottom right, #b8cde6 0%, #e9cdd9 100%);
 }
 
@@ -33,6 +33,15 @@
     background: var(--bs-dark);
     color: white;
 }
+
+.bg-success-custom {
+    background-color: green;
+}
+
+.bg-danger-custom {
+    background-color: red;
+}
+
 /* timeline.ejs */
 .accordion-item {
     border: none;
@@ -60,4 +69,12 @@
 
 .accordion-button:after {
     background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23ffffff'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>") !important;
+}
+
+/* footer.ejs */
+footer {
+    position: relative;
+    bottom: 0%;
+    width: 100%;
+    text-align: center;
 }

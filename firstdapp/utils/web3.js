@@ -3,6 +3,7 @@ require('dotenv').config();
 const Web3 = require('web3');
 const TruffleContract = require('truffle-contract');
 const fs = require('fs');
+const { type } = require('os');
  
 class w3 {
  

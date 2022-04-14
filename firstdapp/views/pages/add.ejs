@@ -17,7 +17,7 @@
         
         <%- include("../partials/header.ejs")%>
 
-        <div class="row align-items-md-stretch">
+        <div class="row align-items-md-stretch px-3">
             <div class="col-md-6">
 
                 <div class="col align-items-md-stretch">
@@ -34,7 +34,7 @@
                         </div>
                     </div>
 
-                    <div class="p-5 mb-4 rounded-3" id="div-select">
+                    <div class="p-5 rounded-3" id="div-select">
                         <div class="table-responsive-sm">
                             <table class="table table-sm table-dark table-hover" id="table-base">
                                 <thead>
@@ -51,7 +51,7 @@
                         </div>
                         <button class="btn mt-4 btn-light" type="button" id="btn-select-files">Select files</button>
                         <input type="file" id="selected-files" name="myFiles" accept=".txt" style="display: none;" multiple>
-                        <button class="btn mt-4 btn-success" type="button" id="btn-submit" disabled="disabled">Submit</button>
+                        <button class="btn mt-4 ms-1 btn-success" type="button" id="btn-submit" disabled="disabled">Submit</button>
                     </div>
 
                 </div>
@@ -132,10 +132,15 @@
                                 station = res.result[0];
                                 msg = '';
                                 for (var i=1; i<res.result.length; i++) {
-                                    msg += res.result[i] + '<br>';
+                                    if (res.result[i].substring(0, 4) == 'data') {
+                                        dataForBlockchain = res.result[i].split('@').slice(1);
+                                        console.log(dataForBlockchain);
+                                    }else {
+                                        msg += res.result[i] + '<br>';
+                                    }    
                                 }
                                 $("#output-console").prepend(
-                                    `<div class="mb-5 card text-white bg-success bg-opacity-40 rounded-3">
+                                    `<div class="mb-5 card text-white bg-success-custom rounded-3">
                                         <h5 class="p-3 card-header">${station}</h5>
                                         <div class="card-body">
                                             <p class="card-text">${msg}</p>
@@ -145,7 +150,7 @@
                                 station = res.result[1].split('/').pop().split('.')[0].toUpperCase();
                                 msg = 'An error was occured.<br>This file did not added to istSOS.'
                                 $("#output-console").prepend(
-                                    `<div class="mb-5 card text-white bg-danger bg-opacity-40 rounded-3">
+                                    `<div class="mb-5 card text-white bg-danger-custom rounded-3">
                                         <h5 class="p-3 card-header">${station}</h5>
                                         <div class="card-body">
                                             <p class="card-text">${msg}</p>

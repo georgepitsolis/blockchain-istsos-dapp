@@ -42,6 +42,7 @@ def check_station_existence(stationNamePath, service_url, cur_db, stations_list,
     stationInfo = find_station_info(stationName, stations_list)
     stationInfo["stationPath"] = stationNamePath
     if stationInfo["stationName"] == "notfound":
+        print("error")
         print("Insert procedure success: False")
         print("There is no station " + stationName + " in Meteo's Records.")
         return False

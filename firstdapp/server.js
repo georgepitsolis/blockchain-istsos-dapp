@@ -39,7 +39,7 @@ const IP = process.env.SERVER_IP || '127.0.0.1';
 // use res.render to load up an ejs view file
 
 // Use pages
-app.use('/', main);             // First page
+app.use('/', main);         // Main page
 app.use('/add', add);           // Add to istSOS
 app.use('/chart', chart);       // Visualize data
 app.use('/timeline', timeline); // BLockchain history

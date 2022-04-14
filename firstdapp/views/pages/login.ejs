@@ -17,35 +17,14 @@
 
         <%- include("../partials/header.ejs")%>
     
-        <div class="container px-3" id="main-container">
-            <div class="p-5 rounded-3" id="div-add-to-istsos">
-                <div class="container-fluid py-5">
-                    <h1 class="display-5 fw-bold">Add to istSOS</h1>
-                    <p class="col-md-8 fs-4">You can add new data for this specific station on the database on istSOS.</p>
-                    <a class="btn btn-outline-dark" type="button" id="btm-add" href="/add"><i class="bi bi-file-earmark-plus"></i></i> Add files</a>
-                </div>
-            </div>
-        
-            <div class="row align-items-md-stretch">
-                <div class="col-md-6 mt-4">
-                    <div class="h-100 p-5 rounded-3" id="div-visualize-data">
-                        <h2>Visualize data</h2>
-                        <p>Select station and sensor and view data on a plot.</p>
-                        <a class="btn btn-outline-light" type="button" id="btm-chart" href="/chart"><i class="bi bi-graph-up"></i> Make chart</a>
-                        <!-- <i class="bi bi-bar-chart-line"></i> -->
-                    </div>
-                </div>
-
-                <div class="col-md-6 mt-4">
-                    <div class="h-100 p-5 rounded-3" id="div-blockchain-history">
-                        <h2>Blockchain history</h2>
-                        <p>All previous additions which have been applied on blockchain</p>
-                        <a class="btn btn-outline-dark" type="button" id="btm-timeline" href="/timeline"><i class="bi bi-clock-history"></i> Timeline</a>
-                    </div>
-                </div>
+        <div class="p-5 rounded-3" id="div-login">
+            <div class="container-fluid py-5">
+                <h1 class="display-5 fw-bold">Log in to blockchain</h1>
+                <p class="col-md-8 fs-4">You can add new data for this specific station on the database on istSOS.</p>
+                <a class="btn btn-outline-dark" type="button" id="btm-login" href="/login"><i class="bi bi-file-earmark-plus"></i></i> Log in</a>
             </div>
         </div>
-        
+
         <%- include("../partials/footer.ejs")%>
 
     </div>

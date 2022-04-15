@@ -5,8 +5,7 @@ const path = require('path');
 const { web3Object } = require('./../utils/web3');
 const fs = require('fs');
 const yaml = require('js-yaml');
-const doc = yaml.load(fs.readFileSync(process.env.YAML, 'utf8'));
-console.log(doc['istsos']['ip']);
+let doc = yaml.load(fs.readFileSync(process.env.YAML, 'utf8'));
 
 var router = express.Router();
 
@@ -23,15 +22,10 @@ router.get('/', function(req, res) {
 });
 
 router.post('/upload/files', upload_files);
+router.post('/set/ip', set_data_ip);
+router.post('/set/db', set_data_db);
 
 function upload_files(req, res, next){
-
-    $.get("add.ejs", function(data) {
-        var data = $(data);
-        var elem = data.find('#input-ip');
-        console.log(elem.value);
-      });
-
     var form = new formidable.IncomingForm();
     form.multiples = true;
 
@@ -71,9 +65,53 @@ function upload_files(req, res, next){
 
     PythonShell.run('postMain.py', options, function(err, results) {
         if (err) console.log(err);
-        // console.log('results: %j', results);
-        res.status(200).send({result: results});
+        console.log('results: %j', results);
+        if(results && results[0] != 'error') {
+            newF = results[2].split('@').slice(1);
+            upload_to_blockchain(res, results, newF[0],newF[1],newF[2],newF[3],newF[4]);
+        }else {
+            res.status(200).send({result: results});
+        }
     });
+};
+
+function set_data_ip(req, res, next) {
+    doc.istsos.ip = req.body['input-ip'];
+    doc.istsos.url = 'http://' + doc.istsos.ip + '/istsos/';
+    fs.writeFile(process.env.YAML, yaml.dump(doc), (err) => {
+        if (err) {
+            console.log(err);
+        }
+    });
+    res.redirect('/add');
+};
+
+function set_data_db(req, res, next) {
+    doc.istsos.db = req.body['input-db'];
+    fs.writeFile(process.env.YAML, yaml.dump(doc), (err) => {
+        if (err) {
+            console.log(err);
+        }
+    });
+    res.redirect('/add');
+};
+
+function upload_to_blockchain(res, results, fullName, name, data, firstM, lastM) {
+    web3Object.contracts.meteo.deployed()
+    .then(instance => {
+        return instance.verifyFile.call(name, fullName, data, { from: web3Object.account });
+    })
+    .then(existfile => {
+        if (!existfile) {
+            web3Object.contracts.meteo.deployed()
+            .then(instance => {
+                return instance.addFile.sendTransaction(fullName, name, data, firstM, lastM, { from: web3Object.account });
+            });
+        }else {
+            results.unshift('already');
+        }
+        res.status(200).send({result: results});
+    }); 
 };
 
 module.exports = router;

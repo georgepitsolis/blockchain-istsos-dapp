@@ -17,8 +17,8 @@ def postMain(uploadsD=None):
     start_time = time.time()
 
     # For any changes you can go to config.yml
-    url = os.getenv(data['istsos']['url'])
-    db = os.getenv(data['istsos']['db'])
+    url = data['istsos']['url']
+    db = data['istsos']['db']
 
     unreadD = os.getenv("PATH_UNREAD")
     readD = os.getenv("PATH_READ")

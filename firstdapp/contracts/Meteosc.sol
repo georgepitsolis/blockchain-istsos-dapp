@@ -4,11 +4,11 @@ pragma solidity >=0.4.22 <0.9.0;
 contract Meteosc {
 
     struct File {
-        string _name;
         string _fullName;
+        string _name;
+        string _data;
         string _firstMesure;
         string _lastMesure;
-        string _data;
     }
 
     struct Days {
@@ -21,32 +21,27 @@ contract Meteosc {
         Days[] _stations;
     }
 
-    struct Stations {
-        string _stationName;
-    }
-
     //kathe name ASIGONIA_20221010 antistixoi se allo struct file
     mapping(string => mapping(string => File[])) public file;
     mapping(string => string[]) public info;
-    mapping(address => Stations) public stations;
     string[] public stationNames;
 
     constructor () {
-        addFile("ASI_1", "ASI", "2022/11/10", "2022/12/10", "fisrt_data");
-        addFile("ASI_1", "ASI", "2022/11/10", "2022/12/10", "second_data");
-        addFile("ASI_1", "ASI", "2022/11/10", "2022/12/10", "third_data");
-        addFile("ASI_2", "ASI", "2022/20/11", "2022/25/11", "first_data");
-        addFile("ASI_2", "ASI", "2022/20/11", "2022/25/11", "second_data");
-        addFile("ASI_3", "ASI", "2022/25/11", "2022/05/12", "first_data");
-        addFile("ASI_4", "ASI", "2022/05/12", "2022/15/12", "first_data");
-        addFile("ASI_5", "ASI", "2022/15/12", "2023/10/01", "first_data");
-        addFile("MEN_1", "MEN", "2021/11/10", "2021/12/10", "fisrt_data");
-        addFile("MEN_2", "MEN", "2021/12/10", "2021/14/10", "first_data");
-        addFile("AXA_1", "AXA", "2021/12/10", "2021/14/10", "first_data");
-        addFile("AXA_1", "AXA", "2021/12/10", "2021/14/10", "second_data");
-        addFile("AXA_2", "AXA", "2021/14/10", "2022/14/01", "first_data");
-        addFile("AXA_2", "AXA", "2021/14/10", "2022/14/01", "second_data");
-        addFile("AXA_2", "AXA", "2021/14/10", "2022/14/01", "third_data");
+        addFile("ASI_1", "ASI", "fisrt_data", "2022/11/10", "2022/12/10");
+        addFile("ASI_1", "ASI", "second_data", "2022/11/10", "2022/12/10");
+        addFile("ASI_1", "ASI", "third_data", "2022/11/10", "2022/12/10");
+        addFile("ASI_2", "ASI", "fisrt_data", "2022/20/11", "2022/25/11");
+        addFile("ASI_2", "ASI", "second_data", "2022/20/11", "2022/25/11");
+        addFile("ASI_3", "ASI", "fisrt_data", "2022/25/11", "2022/05/12");
+        addFile("ASI_4", "ASI", "fisrt_data", "2022/05/12", "2022/15/12");
+        addFile("ASI_5", "ASI", "fisrt_data", "2022/15/12", "2023/10/01");
+        addFile("MEN_1", "MEN", "fisrt_data", "2021/11/10", "2021/12/10");
+        addFile("MEN_2", "MEN", "fisrt_data", "2021/12/10", "2021/14/10");
+        addFile("AXA_1", "AXA", "fisrt_data", "2021/12/10", "2021/14/10");
+        addFile("AXA_1", "AXA", "second_data", "2021/12/10", "2021/14/10");
+        addFile("AXA_2", "AXA", "fisrt_data", "2021/14/10", "2022/14/01");
+        addFile("AXA_2", "AXA", "second_data", "2021/14/10", "2022/14/01");
+        addFile("AXA_2", "AXA", "third_data", "2021/14/10", "2022/14/01");
     }
 
     function addFile(
@@ -66,7 +61,6 @@ contract Meteosc {
 
         if (info[name].length == 0) {
             stationNames.push(name);
-            stations[msg.sender]._stationName = name;
         }
         
         if (file[name][fullName].length == 0) {
@@ -74,11 +68,6 @@ contract Meteosc {
         }
 
         file[name][fullName].push(curfile);
-    }
-
-    function getStationInfo(
-    )public view returns (string memory) {
-        return stations[msg.sender]._stationName;
     }
 
     function getFile(
@@ -118,6 +107,19 @@ contract Meteosc {
             curS[i]._name = stationNames[i];
         }
         return curS;
+    }
+
+    function verifyFile(
+        string memory name,
+        string memory fullName,
+        string memory data
+    )public view returns (bool) {
+        File memory selectedFile = getFile(name, fullName);
+        if (keccak256(abi.encodePacked(selectedFile._data)) == keccak256(abi.encodePacked(data))) {
+            return true;
+        }else {
+            return false;
+        }
     }
 
 }

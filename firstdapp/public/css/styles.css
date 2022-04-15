@@ -38,6 +38,10 @@
     background-color: green;
 }
 
+.bg-info-custom {
+    background-color: rgb(146, 146, 0);
+}
+
 .bg-danger-custom {
     background-color: red;
 }

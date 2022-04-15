@@ -26,11 +26,11 @@
                         <h5>Connect to istSOS database</h5>
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing-default">Ip</span>
-                            <input type="text" id="input-ip" value="<%= process.env.ISTSOS_IP %>" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" disabled>
+                            <input type="text" id="input-ip" value="<%= doc['istsos']['ip'] %>" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                         </div>
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing-default">Db</span>
-                            <input type="text" id="input-db" value="<%= process.env.ISTSOS_DB %>" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" disabled>
+                            <input type="text" id="input-db" value="<%= doc['istsos']['db'] %>" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                         </div>
                     </div>
 
@@ -147,6 +147,7 @@
                                         </div>
                                     </div>`);
                             }else {
+                                console.log(res.result[1]);
                                 station = res.result[1].split('/').pop().split('.')[0].toUpperCase();
                                 msg = 'An error was occured.<br>This file did not added to istSOS.'
                                 $("#output-console").prepend(
@@ -169,6 +170,11 @@
                 $('#table-body').append(`<tr></tr>`);  
                 
             });
+
+            $("#input-ip").on('change', function() {
+                var value = $("#input-ip").val();
+                console.log(value);
+            })
 
             function search(name, myArray){
                 for (var i=0; i < myArray.length; i++) {

@@ -161,6 +161,7 @@ def post_data_on_station(url, service, wd, proc, conf=None):
                 
 
             fullName = os.path.split(f)[1].replace(ext, "")
+            fullNamePath = f
             dtstr = os.path.split(f)[1].replace("%s_" % proc, "").replace(ext, "")
             offset = False
 
@@ -268,6 +269,8 @@ def post_data_on_station(url, service, wd, proc, conf=None):
                     # Read response
                     res.raise_for_status()
                     if not res.json()['success']:
+                        log("error")
+                        log(fullNamePath)
                         log("Insert observation success: False")
                         return False, 0
                     else:

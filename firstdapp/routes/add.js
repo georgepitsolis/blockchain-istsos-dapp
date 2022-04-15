@@ -4,7 +4,10 @@ const formidable = require('formidable');
 const path = require('path');
 const { web3Object } = require('./../utils/web3');
 const fs = require('fs');
-const { resolve } = require('dns');
+const yaml = require('js-yaml');
+const doc = yaml.load(fs.readFileSync(process.env.YAML, 'utf8'));
+console.log(doc['istsos']['ip']);
+
 var router = express.Router();
 
 router.get('/', function(req, res) {
@@ -14,13 +17,21 @@ router.get('/', function(req, res) {
     res.render('pages/add', {
         title: 'Add files page',
         station: "Hello",
-        messages: messages
+        messages: messages,
+        doc: doc
     });
 });
 
 router.post('/upload/files', upload_files);
 
 function upload_files(req, res, next){
+
+    $.get("add.ejs", function(data) {
+        var data = $(data);
+        var elem = data.find('#input-ip');
+        console.log(elem.value);
+      });
+
     var form = new formidable.IncomingForm();
     form.multiples = true;
 

@@ -2,9 +2,4 @@ istsos:
   db: blockchain
   ip: 192.168.0.106
   url: http://192.168.0.106/istsos/
-meteo:
-  stations: ../pythonscripts/external-data/stations_list.txt
-paths:
-  primitive: ../firstdapp/routes/uploads/
-  read: ../pythonscripts/read_data/
-  unread: ../pythonscripts/unread_data/
+

@@ -7,14 +7,18 @@ import postData
 import shutil
 import time
 from dotenv import load_dotenv
+import yaml
 load_dotenv("../firstdapp/.env")
 
 def postMain(uploadsD=None):
+    with open('../pythonscripts/external-data/config.yml', 'r') as file:
+        data = yaml.safe_load(file)
+
     start_time = time.time()
 
     # For any changes you can go to config.yml
-    url = os.getenv("ISTSOS_URL")
-    db = os.getenv("ISTSOS_DB")
+    url = os.getenv(data['istsos']['url'])
+    db = os.getenv(data['istsos']['db'])
 
     unreadD = os.getenv("PATH_UNREAD")
     readD = os.getenv("PATH_READ")
@@ -40,8 +44,7 @@ def postMain(uploadsD=None):
         if checkForStation.check_station_existence(file, url, db, stations, unreadD):
             insert, value = postData.post_data_on_station(url[:-1], db, unreadD[:-1], stationName)
             values += value
-            if insert == True:
-                shutil.move(file, readD + file.split('/')[-1])
+            shutil.move(file, readD + file.split('/')[-1])
 
     # print("Total time (sec): %s" % round(time.time() - start_time, 2))
     # print("Total values:     %s" % values)

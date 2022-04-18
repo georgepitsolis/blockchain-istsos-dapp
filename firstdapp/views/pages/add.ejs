@@ -132,12 +132,11 @@
                                 if(res.result[0] == 'already') {
                                     station = res.result[1];
                                     msg = 'This file already exist in istSOS database as well as in blockchain.';
-                                    console.log(msg);
                                     $("#output-console").prepend(
                                         `<div class="mb-5 card text-white bg-info-custom rounded-3">
                                             <h5 class="p-3 card-header">${station}</h5>
                                             <div class="card-body">
-                                                <p class="card-text"><${msg}/p>
+                                                <p class="card-text">${msg}</p>
                                             </div>
                                         </div>`);
                                     

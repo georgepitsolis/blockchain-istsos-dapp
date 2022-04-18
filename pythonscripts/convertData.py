@@ -4,6 +4,7 @@ import glob
 import yaml 
 import re
 import os
+import hashlib
 
 with open("../pythonscripts/external-data/units-cfg.yml", "r") as ymlfile:
     units = yaml.safe_load(ymlfile)
@@ -151,4 +152,71 @@ def convert_data_from_files(primitive_data, unread_data, conf=None):
 
 		os.remove(file)
 
-# convert_data_from_files("./pythonscripts/primitive_data/*.txt", "./pythonscripts/unread_data/")
+def convert_data_for_verification(file_for_check):	
+	
+	f = open(file_for_check, "r")
+	i = 0
+	place = []; wrongLine = []
+	wrong = False
+
+	try:
+		for line in f:
+			if line.split() == []: continue
+			if i == 0:
+				prevLine = line
+				prev = fix_line(prevLine)
+			elif i == 1:
+				newNames = [x.replace('.','') for x in fix_names(line, prev, prevLine, 0, 0)]
+				place.append(convert_sensor_label(newNames))
+				length = len(newNames)
+				labels = []
+				for x in newNames:
+					m = re.search(r"\d", x)
+					if m: 
+						if x[m.start()-1] != ':' and m.start()+1 < len(x): labels.append(x[:m.start()] + x[m.start()+1:])
+						elif x[m.start()-1] != ':' and m.start()+1 >= len(x): labels.append(x[:m.start()])
+						elif x[m.start()-1] == ':' and m.start()+1 < len(x): labels.append(x[:m.start()-1] + x[m.start()+1:])
+						else: labels.append(x[:m.start()-1])
+					else: labels.append(x)
+			elif line[0:3] != "---":
+				data = line.split()
+				data = fix_date(data)
+				data = fix_wind_direction_empty_space(data)
+				# Check if data ara splitted correct
+				if len(data[1:]) == length:
+					correctDataPattern = data[1:]
+					place.append(correctDataPattern)
+				elif len(data[1:]) < length:
+					# When the mistake occured on the first data row
+					wrong = True
+					wrongLine.append([i-2, data[1:]])
+					place.append([])
+			i += 1
+		if wrong == True:
+			for input in wrongLine:
+				place[input[0]] = fix_union(input[1], correctDataPattern, labels[1:])		
+		f.close()
+
+		tempFile = open("tempFile.txt", "w")
+		for row in place:
+			tempFile.write(','.join(row) + '\n')
+		tempFile.close()
+		
+		nameD = file_for_check.split("/")[-1].split(".")[0].upper()
+		newName = nameD + "_" + data[1].replace('-','').replace(':','').replace('T','')[:14] + ".txt"
+				
+		file = open("tempFile.txt", 'rb')
+		bytes = file.read() # read entire file as bytes
+		hashValue = hashlib.sha256(bytes).hexdigest()
+		file.close()
+
+		os.remove("tempFile.txt")
+		print(newName.split('_')[0])
+		print(newName.split('.')[0])
+		print(hashValue)
+	except:
+		print("error")
+
+	
+
+# convert_data_for_verification("../../penteli.txt")

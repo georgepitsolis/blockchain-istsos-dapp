@@ -45,7 +45,7 @@ function upload_files(req, res, next){
         
         const file = files.myFiles;
         const fileName = file.originalFilename;
-        console.log("file name:", fileName);              
+        // console.log("file name:", fileName);              
 
         // renames the file in the directory
         fs.rename(file.filepath, path.join(uploadFolder, fileName), function(err) {
@@ -68,7 +68,7 @@ function upload_files(req, res, next){
         console.log('results: %j', results);
         if(results && results[0] != 'error') {
             newF = results[2].split('@').slice(1);
-            upload_to_blockchain(res, results, newF[0],newF[1],newF[2],newF[3],newF[4]);
+            upload_to_blockchain(res, results, newF[0], newF[1] ,newF[2], newF[3], newF[4]);
         }else {
             res.status(200).send({result: results});
         }
@@ -99,17 +99,20 @@ function set_data_db(req, res, next) {
 function upload_to_blockchain(res, results, fullName, name, data, firstM, lastM) {
     web3Object.contracts.meteo.deployed()
     .then(instance => {
-        return instance.verifyFile.call(name, fullName, data, { from: web3Object.account });
+        console.log(name, fullName, data);
+        return instance.verifyData.call(name, fullName, data, { from: web3Object.account });
     })
     .then(existfile => {
         if (!existfile) {
             web3Object.contracts.meteo.deployed()
-            .then(instance => {
-                return instance.addFile.sendTransaction(fullName, name, data, firstM, lastM, { from: web3Object.account });
+            .then(instance2 => {
+                console.log(fullName);
+                return instance2.addFile.sendTransaction(fullName, name, data, firstM, lastM, { from: web3Object.account });
             });
         }else {
             results.unshift('already');
         }
+        // console.log(results);
         res.status(200).send({result: results});
     }); 
 };

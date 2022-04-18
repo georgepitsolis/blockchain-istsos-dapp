@@ -1,6 +1,9 @@
 :root {
     --main-gradient: linear-gradient(to bottom right, #e9cdd9c7 0%, #b8cde6cc 100%);
     --main-gradient-revert: linear-gradient(to bottom right, #b8cde6 0%, #e9cdd9 100%);
+    --success: rgb(29, 177, 29);
+    --basic: rgb(255, 255, 255);
+    --error: rgb(211, 43, 43);
 }
 
 /* main.ejs */
@@ -49,8 +52,6 @@
 /* timeline.ejs */
 .accordion-item {
     border: none;
-    margin-top: 15px;
-    margin-bottom: 15px;
     background: none;
 }
 
@@ -73,6 +74,35 @@
 
 .accordion-button:after {
     background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23ffffff'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>") !important;
+}
+
+.bg-basic-verify {
+    border: 2px solid var(--basic);
+    border-radius: 0.2rem;
+    color: var(--basic);
+    background: transparent;
+}
+
+.bg-success-verify {
+    border: 2px solid var(--success);
+    border-radius: 0.2rem;
+    /* color: var(--success); */
+    background: transparent;
+}
+
+.bg-error-verify {
+    border: 2px solid var(--error);
+    border-radius: 0.2rem;
+    /* color: var(--error); */
+    background: transparent;
+}
+
+.bi-patch-check-fill {
+    color: var(--success)
+}
+
+.bi-patch-minus-fill {
+    color: var(--error)
 }
 
 /* footer.ejs */

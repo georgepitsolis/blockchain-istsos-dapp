@@ -74,7 +74,8 @@ contract Meteosc {
         string memory name,
         string memory fullName
     )public view returns (File memory) {
-        return file[name][fullName][file[name][fullName].length - 1];
+        if (file[name][fullName].length != 0) 
+            return file[name][fullName][file[name][fullName].length - 1];
     }
 
     function getFileVertions(
@@ -109,7 +110,7 @@ contract Meteosc {
         return curS;
     }
 
-    function verifyFile(
+    function verifyData(
         string memory name,
         string memory fullName,
         string memory data

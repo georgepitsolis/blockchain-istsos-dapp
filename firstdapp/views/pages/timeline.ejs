@@ -20,11 +20,33 @@
         
         <%- include("../partials/header.ejs")%>
 
-        <div class="container py-4">
-            <div class="accordion" id="accordion-base">
-            </div>
-        </div>
+        <div class="row align-items-md-stretch px-3">
+            <div class="col-md-4">
 
+                <div class="col align-items-md-stretch">
+
+                    <div class="p-5 mb-4 rounded-3" id="div-select">
+                        <h4>Verify your data here</h4>
+                        <div class="container p-0 mt-4" id="container-verify">
+                        </div>
+                        <button class="btn mt-4 btn-light" type="button" id="btn-select-file">Select file</button>
+                        <input type="file" id="selected-file" name="myFile" accept=".txt" style="display: none;">
+                        <button class="btn mt-4 ms-1 btn-success" type="button" id="btn-verify" disabled="disabled">Verify</button>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-8 mb-4">
+                <div class="h-100 p-5 rounded-3" id="div-output-console">
+                    <div class="accordion" id="accordion-base">
+                    </div>
+                </div>           
+            </div>
+            
+        </div>
+        
         <%- include("../partials/footer.ejs")%>
 
     </div>
@@ -41,69 +63,78 @@
             globalAddOns = '<%- JSON.stringify(data) %>';
             globalAddOns = JSON.parse(globalAddOns);
             for (var i = 0; i < globalAddOns.length; i++) {
-                addStation(globalAddOns[i][0], globalAddOns[i][1]);
+                if (i == globalAddOns.length - 1)
+                    addStation(globalAddOns[i][0], globalAddOns[i][1], true);
+                else    
+                    addStation(globalAddOns[i][0], globalAddOns[i][1], false);
+
             }
 
-            function addStation(stationName, stationAddOns) {
+            function addStation(stationName, stationAddOns, state) {
                 var headingSt = "heading-" + stationName;
                 var accordionSt = "accordion-" + stationName;
                 var bodySt = "body-accordion-" + stationName;
+                if (state) mb = "";
+                else mb = "mb-3";
                 $("#accordion-base").append(`
-                    <div class="accordion-item">
+                    <div class="accordion-item ${mb}" id="accordion-item-1">
                         <h2 class="accordion-header" id="${headingSt}">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${accordionSt}" aria-expanded="true" aria-controls="${accordionSt}">
                                 ${stationName}
                             </button>
                         </h2>
                         <div id="${accordionSt}" class="accordion-collapse collapse" aria-labelledby="${headingSt}">
-                        <div class="accordion-body" id="${bodySt}">
+                        <div class="accordion-body py-0 px-3 mt-3" id="${bodySt}">
                         </div>
                         </div>
                     </div>`
                 );
 
                 for (var i = 0; i < stationAddOns.length; i++) {
-                    addStationDay(bodySt, stationAddOns[i][0], stationAddOns[i][1]);
+                    addStationDay(bodySt, stationAddOns[i][0], stationAddOns[i][1], i);
                 }
             }
 
-            function addStationDay(bodySt, dayName, dayAddOns) {
+            function addStationDay(bodySt, dayName, dayAddOns, state) {
                 var headingDay = "heading-" + dayName;
                 var accordionDay = "accordion-" + dayName;
                 var bodyDay = "body-accordion-" + dayName;
-                // console.log(bodyDay, dayName, dayAddOns);
+                if (state == 0) mb = "";
+                else mb = "mb-3";
                 $("#" + bodySt).prepend(`
-                    <div class="accordion-item">
+                    <div class="accordion-item ${mb}">
                         <h2 class="accordion-header" id="${headingDay}">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${accordionDay}" aria-expanded="true" aria-controls="${accordionDay}">
                                 ${dayName}
                             </button>
                         </h2>
                         <div id="${accordionDay}" class="accordion-collapse collapse" aria-labelledby="${headingDay}">
-                        <div class="accordion-body" id="${bodyDay}">
+                        <div class="accordion-body py-0 px-3 mt-3" id="${bodyDay}">
                         </div>
                         </div>
                     </div>`
                 );
 
                 for (var i = 0; i < dayAddOns.length; i++) {
-                    addDayVersion(bodyDay, dayName + "-" + (i + 1), dayAddOns[i], i + 1);
+                    addDayVersion(bodyDay, dayName + "-" + (i + 1), dayAddOns[i], i + 1, i);
                 }
             }
 
-            function addDayVersion(bodyDay, versionName, versionAddOns, ver) {
+            function addDayVersion(bodyDay, versionName, versionAddOns, ver, state) {
                 var headingVer = "heading-" + versionName;
                 var accordionVer = "accordion-" + versionName;
                 var bodyVer = "body-accordion-" + versionName;
+                if (state == 0) mb = "";
+                else mb = "mb-3";
                 $("#" + bodyDay).prepend(`
-                    <div class="accordion-item">
+                    <div class="accordion-item ${mb}">
                         <h2 class="accordion-header" id="${headingVer}">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${accordionVer}" aria-expanded="true" aria-controls="${accordionVer}">
                                 v${ver}. ${versionName}
                             </button>
                         </h2>
                         <div id="${accordionVer}" class="accordion-collapse collapse" aria-labelledby="${headingVer}">
-                        <div class="accordion-body" id="${bodyVer}">
+                        <div class="accordion-body py-0 px-3 mt-3" id="${bodyVer}">
                             <table class="table">
                                 <thead><tr>
                                     <th>Hash value</th>
@@ -121,6 +152,87 @@
                     </div>`
                 );
             }
+
+            // Select files
+            var fileObj = [];
+            $("#btn-select-file").on('click', function() {
+                $('#selected-file').trigger('click');
+            });
+
+            $("#selected-file").change(function() {
+                fileObj = [];
+                var curFile = $(this).get(0).files[0];
+                var fileName = curFile.name;
+                fileObj.push(curFile);
+                
+                $('#container-verify').append(`
+                    <div class="p-2 mb-3 rounded-3 bg-basic-verify" id="div-verify">
+                        <div class="col align-items-md-stretch">
+                            <div class="row-md-6">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h7>${fileName}</h7>
+                                    <i class="bi bi-patch-question-fill" id="icon-verify"></i>
+                                </div>
+                            </div>
+                            <div class="row-md-6" id="info-verify">
+                            
+                            </div>
+                        </div>
+                    </div>`);
+                
+                changeVerify();
+                this.value = null;
+            });  
+
+            $("#btn-verify").on('click', async function() {
+                let form_data = new FormData();
+                form_data.append('myFile', fileObj[0]);
+                await $.ajax({
+                    'url':'/timeline/verify',
+                    'type':'POST',
+                    'data': form_data,
+                    'success': function(res) {
+                        console.log(res.result);
+                        if(res.result && res.result[3] == true) {
+                            $('#div-verify').removeClass('bg-basic-verify');
+                            $('#div-verify').addClass('bg-success-verify');
+                            $('#icon-verify').removeClass('bi-patch-question-fill');
+                            $('#icon-verify').addClass('bi-patch-check-fill');
+                        }else {
+                            $('#div-verify').removeClass('bg-basic-verify');
+                            $('#div-verify').addClass('bg-error-verify');
+                            $('#icon-verify').removeClass('bi-patch-question-fill');
+                            $('#icon-verify').addClass('bi-patch-minus-fill');
+                        }
+                        $('#info-verify').append(`
+                            <div class="border-top pt-2 mt-2 text-truncate">${res.result[1]}
+                            <br>${res.result[2]}
+                            </div>
+                        `);
+
+                        $('#div-verify').removeAttr('id');
+                        $('#info-verify').removeAttr('id');
+                        $('#icon-verify').removeAttr('id');
+
+                    },
+                    'contentType': false,
+                    'processData': false
+                }).catch(e=>console.log(e));
+
+                fileObj = [];
+                changeVerify();
+                // $('#table-body').empty();
+                // $('#table-body').append(`<tr></tr>`);  
+                
+            });
+
+            function changeVerify() {
+                if (fileObj.length != 0) {
+                    $("#btn-verify").removeAttr('disabled');
+                }else {
+                    $("#btn-verify").attr('disabled', true);
+                };
+            };
         });
 
     </script>

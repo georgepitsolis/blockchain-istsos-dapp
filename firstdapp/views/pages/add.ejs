@@ -128,7 +128,9 @@
                         'type':'POST',
                         'data': form_data,
                         'success': function(res) {
-                            if(res.result && res.result[0] != 'error') {
+                            var check = res.result.find(x => x == 'error');
+                            console.log(res.result);
+                            if(res.result && check == null) {
                                 if(res.result[0] == 'already') {
                                     station = res.result[1];
                                     msg = 'This file already exist in istSOS database as well as in blockchain.';
@@ -144,7 +146,6 @@
                                     station = res.result[0];
                                     msg = '';
                                     for (var i=1; i<res.result.length; i++) {
-                                        console.log(res.result[i]);
                                         if (res.result[i].substring(0, 4) != 'data') {
                                             msg += res.result[i] + '<br>';
                                         } 
@@ -158,7 +159,6 @@
                                         </div>`);
                                 }
                             }else {
-                                console.log(res.result[1]);
                                 station = res.result[1].split('/').pop().split('.')[0].toUpperCase();
                                 msg = 'An error was occured.<br>This file did not added to istSOS.';
                                 $("#output-console").prepend(

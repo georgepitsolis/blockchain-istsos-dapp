@@ -65,8 +65,8 @@ function upload_files(req, res, next){
 
     PythonShell.run('postMain.py', options, function(err, results) {
         if (err) console.log(err);
-        console.log('results: %j', results);
-        if(results && results[0] != 'error') {
+        var check = results.find(x => x == 'error');
+        if(results && check == 'null') {
             newF = results[2].split('@').slice(1);
             upload_to_blockchain(res, results, newF[0], newF[1] ,newF[2], newF[3], newF[4]);
         }else {
@@ -96,25 +96,25 @@ function set_data_db(req, res, next) {
     res.redirect('/add');
 };
 
-function upload_to_blockchain(res, results, fullName, name, data, firstM, lastM) {
+function upload_to_blockchain(res, results, fullName, name, hash, firstM, lastM) {
     web3Object.contracts.meteo.deployed()
     .then(instance => {
-        console.log(name, fullName, data);
-        return instance.verifyData.call(name, fullName, data, { from: web3Object.account });
+        return instance.verifyHash.call(name, fullName, hash, { from: web3Object.account });
     })
     .then(existfile => {
         if (!existfile) {
             web3Object.contracts.meteo.deployed()
             .then(instance2 => {
-                console.log(fullName);
-                return instance2.addFile.sendTransaction(fullName, name, data, firstM, lastM, { from: web3Object.account });
+                return instance2.addFile.sendTransaction(fullName, name, hash, firstM, lastM, { from: web3Object.account });
             });
         }else {
             results.unshift('already');
         }
         // console.log(results);
         res.status(200).send({result: results});
+
     }); 
+
 };
 
 module.exports = router;

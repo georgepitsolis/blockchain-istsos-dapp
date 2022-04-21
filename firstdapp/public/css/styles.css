@@ -50,6 +50,10 @@
 }
 
 /* timeline.ejs */
+.table {
+    table-layout: fixed;
+}
+
 .accordion-item {
     border: none;
     background: none;

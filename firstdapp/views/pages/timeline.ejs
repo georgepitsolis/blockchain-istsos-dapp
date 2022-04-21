@@ -79,7 +79,7 @@
                 $("#accordion-base").append(`
                     <div class="accordion-item ${mb}" id="accordion-item-1">
                         <h2 class="accordion-header" id="${headingSt}">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${accordionSt}" aria-expanded="true" aria-controls="${accordionSt}">
+                            <button class="accordion-button collapsed text-break" type="button" data-bs-toggle="collapse" data-bs-target="#${accordionSt}" aria-expanded="true" aria-controls="${accordionSt}">
                                 ${stationName}
                             </button>
                         </h2>
@@ -104,7 +104,7 @@
                 $("#" + bodySt).prepend(`
                     <div class="accordion-item ${mb}">
                         <h2 class="accordion-header" id="${headingDay}">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${accordionDay}" aria-expanded="true" aria-controls="${accordionDay}">
+                            <button class="accordion-button collapsed text-break" type="button" data-bs-toggle="collapse" data-bs-target="#${accordionDay}" aria-expanded="true" aria-controls="${accordionDay}">
                                 ${dayName}
                             </button>
                         </h2>
@@ -129,7 +129,7 @@
                 $("#" + bodyDay).prepend(`
                     <div class="accordion-item ${mb}">
                         <h2 class="accordion-header" id="${headingVer}">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#${accordionVer}" aria-expanded="true" aria-controls="${accordionVer}">
+                            <button class="accordion-button collapsed text-break" type="button" data-bs-toggle="collapse" data-bs-target="#${accordionVer}" aria-expanded="true" aria-controls="${accordionVer}">
                                 v${ver}. ${versionName}
                             </button>
                         </h2>
@@ -137,14 +137,14 @@
                         <div class="accordion-body py-0 px-3 mt-3" id="${bodyVer}">
                             <table class="table">
                                 <thead><tr>
-                                    <th>Hash value</th>
-                                    <th>First measure</th>
-                                    <th>Last measure</th>
+                                    <th class="text-break">Hash value</th>
+                                    <th class="text-break">First measure</th>
+                                    <th class="text-break">Last measure</th>
                                 </tr></thead>
                                 <tbody><tr>
-                                    <td>${versionAddOns[2]}</td>
-                                    <td>${versionAddOns[3]}</td>
-                                    <td>${versionAddOns[4]}</td>
+                                    <td class="text-break">${versionAddOns[2]}</td>
+                                    <td class="text-break">${versionAddOns[3]}</td>
+                                    <td class="text-break">${versionAddOns[4]}</td>
                                 </tr></tbody>
                             </table>
                         </div>
@@ -205,7 +205,7 @@
                             $('#icon-verify').addClass('bi-patch-minus-fill');
                         }
                         $('#info-verify').append(`
-                            <div class="border-top pt-2 mt-2 text-truncate">${res.result[1]}
+                            <div class="border-top pt-2 mt-2 text-break">${res.result[1]}
                             <br>${res.result[2]}
                             </div>
                         `);

@@ -1,1 +1,149 @@
-<h1>Chart</h1>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>
+        <%= title %>
+    </title>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+
+    <div class="container py-4">
+        
+        <%- include("../partials/header.ejs")%>
+
+        <div class="row align-items-md-stretch px-3">
+            <div class="col-md-4">
+
+                <div class="col align-items-md-stretch">
+
+                    <div class="p-5 mb-4 rounded-3" id="div-select">
+                        <h4>Verify your data here</h4>
+                        <div class="container p-0 mt-4" id="container-verify">
+                        </div>
+                        <button class="btn mt-4 btn-light" type="button" id="btn-select-file">Select file</button>
+                        <input type="file" id="selected-file" name="myFile" accept=".txt" style="display: none;">
+                        <button class="btn mt-4 ms-1 btn-success" type="button" id="btn-verify" disabled="disabled">Verify</button>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-8 mb-4">
+                <div class="h-100 p-5 rounded-3" id="div-output-console">
+                    <div class="accordion" id="accordion-base">
+                    </div>
+                </div>           
+            </div>
+            
+        </div>
+        
+        <%- include("../partials/footer.ejs")%>
+
+    </div>
+
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            
+            // Select files
+            var fileObj = [];
+            $("#btn-select-file").on('click', function() {
+                $('#selected-file').trigger('click');
+            });
+
+            $("#selected-file").change(function() {
+                fileObj = [];
+                var curFile = $(this).get(0).files[0];
+                var fileName = curFile.name;
+                fileObj.push(curFile);
+                
+                $('#container-verify').append(`
+                    <div class="p-2 mb-3 rounded-3 bg-basic-verify" id="div-verify">
+                        <div class="col align-items-md-stretch">
+                            <div class="row-md-6">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h7>${fileName}</h7>
+                                    <i class="bi bi-patch-question-fill" id="icon-verify"></i>
+                                </div>
+                            </div>
+                            <div class="row-md-6" id="info-verify">
+                            
+                            </div>
+                        </div>
+                    </div>`);
+                
+                changeVerify();
+                this.value = null;
+            });  
+
+            $("#btn-verify").on('click', async function() {
+                let form_data = new FormData();
+                form_data.append('myFile', fileObj[0]);
+                await $.ajax({
+                    'url':'/timeline/verify',
+                    'type':'POST',
+                    'data': form_data,
+                    'success': function(res) {
+                        console.log(res.result);
+                        if(res.result && res.result[3] == true) {
+                            $('#div-verify').removeClass('bg-basic-verify');
+                            $('#div-verify').addClass('bg-success-verify');
+                            $('#icon-verify').removeClass('bi-patch-question-fill');
+                            $('#icon-verify').addClass('bi-patch-check-fill');
+                        }else {
+                            $('#div-verify').removeClass('bg-basic-verify');
+                            $('#div-verify').addClass('bg-error-verify');
+                            $('#icon-verify').removeClass('bi-patch-question-fill');
+                            $('#icon-verify').addClass('bi-patch-minus-fill');
+                        }
+                        $('#info-verify').append(`
+                            <div class="border-top pt-2 mt-2 text-break">${res.result[1]}
+                            <br>${res.result[2]}
+                            </div>
+                        `);
+
+                        $('#div-verify').removeAttr('id');
+                        $('#info-verify').removeAttr('id');
+                        $('#icon-verify').removeAttr('id');
+
+                    },
+                    'contentType': false,
+                    'processData': false
+                }).catch(e=>console.log(e));
+
+                fileObj = [];
+                changeVerify();
+                // $('#table-body').empty();
+                // $('#table-body').append(`<tr></tr>`);  
+                
+            });
+
+            function changeVerify() {
+                if (fileObj.length != 0) {
+                    $("#btn-verify").removeAttr('disabled');
+                }else {
+                    $("#btn-verify").attr('disabled', true);
+                };
+            };
+        });
+
+    </script>
+</body>
+
+</html>

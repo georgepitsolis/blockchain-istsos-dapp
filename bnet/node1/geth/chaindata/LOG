@@ -1,33 +1,44 @@
-=============== Apr 18, 2022 (EEST) ===============
-13:10:12.554587 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
-13:10:12.559663 db@open opening
-13:10:12.560268 version@stat F·[] S·0B[] Sc·[]
-13:10:12.562252 db@janitor F·2 G·0
-13:10:12.562486 db@open done T·2.788571ms
-13:10:12.563869 db@close closing
-13:10:12.563919 db@close done T·49.36µs
-=============== Apr 18, 2022 (EEST) ===============
-13:13:48.260556 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
-13:13:48.260752 version@stat F·[] S·0B[] Sc·[]
-13:13:48.260774 db@open opening
-13:13:48.260824 journal@recovery F·1
-13:13:48.264084 journal@recovery recovering @1
-13:13:48.269217 memdb@flush created L0@2 N·15 S·1018B "\x11\xdd\xe0..\x00\x837,v5":"sec..Fl\x99,v2"
-13:13:48.272104 version@stat F·[1] S·1018B[1018B] Sc·[0.25]
-13:13:48.282362 db@janitor F·3 G·0
-13:13:48.282389 db@open done T·21.600014ms
-19:07:21.290370 db@close closing
-19:07:21.290425 db@close done T·53.596µs
-=============== Apr 18, 2022 (EEST) ===============
-19:35:49.688425 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
-19:35:49.688542 version@stat F·[1] S·1018B[1018B] Sc·[0.25]
-19:35:49.688563 db@open opening
-19:35:49.688605 journal@recovery F·1
-19:35:49.690344 journal@recovery recovering @3
-19:35:49.697888 memdb@flush created L0@5 N·516 S·66KiB "\x000\x01..\xfc\xd9&,v455":"\xff˿..x\u0602,v346"
-19:35:49.700606 version@stat F·[2] S·67KiB[67KiB] Sc·[0.50]
-19:35:49.706095 db@janitor F·4 G·0
-19:35:49.706122 db@open done T·17.548551ms
-=============== Apr 19, 2022 (EEST) ===============
-01:03:57.211045 db@close closing
-01:03:57.211093 db@close done T·47.422µs
+=============== Apr 21, 2022 (EEST) ===============
+11:00:18.314177 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+11:00:18.321528 db@open opening
+11:00:18.321958 version@stat F·[] S·0B[] Sc·[]
+11:00:18.322975 db@janitor F·2 G·0
+11:00:18.323020 db@open done T·1.458462ms
+11:00:18.323719 db@close closing
+11:00:18.323777 db@close done T·56.773µs
+=============== Apr 21, 2022 (EEST) ===============
+11:02:01.899106 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+11:02:01.899219 version@stat F·[] S·0B[] Sc·[]
+11:02:01.899233 db@open opening
+11:02:01.899257 journal@recovery F·1
+11:02:01.900567 journal@recovery recovering @1
+11:02:01.902880 memdb@flush created L0@2 N·15 S·1021B "H+\xdf..\xfc\x8a,,v8":"\xcdԙ..\x9c,D,v4"
+11:02:01.904177 version@stat F·[1] S·1021B[1021B] Sc·[0.25]
+11:02:01.908558 db@janitor F·3 G·0
+11:02:01.908578 db@open done T·9.338687ms
+11:21:41.369222 db@close closing
+11:21:41.369285 db@close done T·61.436µs
+=============== Apr 21, 2022 (EEST) ===============
+14:07:23.448188 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+14:07:23.448845 version@stat F·[1] S·1021B[1021B] Sc·[0.25]
+14:07:23.448865 db@open opening
+14:07:23.448901 journal@recovery F·1
+14:07:23.468425 journal@recovery recovering @3
+14:07:23.475607 memdb@flush created L0@5 N·254 S·40KiB "\x00\xa2H..\xe6\x19r,v242":"\xfc\xc7G.._l/,v158"
+14:07:23.491604 version@stat F·[2] S·41KiB[41KiB] Sc·[0.50]
+14:07:23.497048 db@janitor F·4 G·0
+14:07:23.497063 db@open done T·48.190008ms
+14:42:25.988008 db@close closing
+14:42:25.988109 db@close done T·99.453µs
+=============== Apr 21, 2022 (EEST) ===============
+14:42:35.040492 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+14:42:35.040600 version@stat F·[2] S·41KiB[41KiB] Sc·[0.50]
+14:42:35.040625 db@open opening
+14:42:35.040665 journal@recovery F·1
+14:42:35.042392 journal@recovery recovering @6
+14:42:35.044206 memdb@flush created L0@8 N·56 S·12KiB "\x01ET..n\x88\xd8,v304":"\xf8j\xfa..pk\x86,v316"
+14:42:35.045528 version@stat F·[3] S·53KiB[53KiB] Sc·[0.75]
+14:42:35.049409 db@janitor F·5 G·0
+14:42:35.049446 db@open done T·8.800253ms
+14:49:23.405858 db@close closing
+14:49:23.405981 db@close done T·119.129µs

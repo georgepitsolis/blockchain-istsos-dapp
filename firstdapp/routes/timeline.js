@@ -69,7 +69,7 @@ function verify_file(req, res, next){
         if (results[0] != "error") {
             web3Object.contracts.meteo.deployed()
             .then(instance => {
-                return instance.verifyData.call(results[0], results[1], results[2], { from: web3Object.account });
+                return instance.verifyHash.call(results[0], results[1], results[2], { from: web3Object.account });
             })
             .then(existData => {
                 console.log(results)

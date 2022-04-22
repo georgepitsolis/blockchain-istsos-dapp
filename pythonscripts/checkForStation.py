@@ -3,7 +3,6 @@ import requests
 import xmltodict 
 import json
 import postProcedure
-from colorama import Fore, Style
 
 # Checking if the station exist in istSOS database
 def check_existence(stationN, service_url, cur_db):

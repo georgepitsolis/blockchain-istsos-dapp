@@ -10,13 +10,10 @@ let doc = yaml.load(fs.readFileSync(process.env.YAML, 'utf8'));
 var router = express.Router();
 
 router.get('/', function(req, res) {
-    let messages = req.flash("messages");
-    if (messages.length == 0) messages = [];
+    doc = yaml.load(fs.readFileSync(process.env.YAML, 'utf8'));
 
     res.render('pages/add', {
         title: 'Add files page',
-        station: "Hello",
-        messages: messages,
         doc: doc
     });
 });

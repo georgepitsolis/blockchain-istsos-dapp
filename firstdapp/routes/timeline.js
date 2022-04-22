@@ -18,7 +18,6 @@ router.get('/', function(req, res) {
             }
             res.render('pages/timeline', {
                 title: 'Blockchain history',
-                station: 'Hello',
                 data: allData
             });
         });
@@ -46,7 +45,7 @@ function verify_file(req, res, next){
         
         const file = files.myFile;
         const fileName = file.originalFilename;
-        console.log("file name:", fileName);              
+        // console.log("file name:", fileName);              
 
         // renames the file in the directory
         fs.rename(file.filepath, path.join(verifyFolder, fileName), function(err) {
@@ -72,7 +71,7 @@ function verify_file(req, res, next){
                 return instance.verifyHash.call(results[0], results[1], results[2], { from: web3Object.account });
             })
             .then(existData => {
-                console.log(results)
+                // console.log(results)
                 let anw = false;
                 if (existData) {
                     anw = true;

@@ -5,8 +5,7 @@ var router = express.Router();
 router.get('/', function(req, res) {
 
     res.render('pages/main', {
-        title: 'Home page',
-        station: "Hello"
+        title: 'Home page'
     });
 });
 

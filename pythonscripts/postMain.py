@@ -6,8 +6,8 @@ import convertData
 import postData
 import shutil
 import time
-from dotenv import load_dotenv
 import yaml
+from dotenv import load_dotenv
 load_dotenv("../firstdapp/.env")
 
 def postMain(uploadsD=None):

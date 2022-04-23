@@ -37,7 +37,7 @@
             <div class="col-md-6">
 
                 <div class="p-5 mb-4 rounded-3" id="div-connect">
-                    <h5>Connect to istSOS database</h5>
+                    <h4>Connect to istSOS database</h4>
                     <form method="post" action="/chart/set/ip">
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing-default">Ip</span>
@@ -55,33 +55,30 @@
                 <div class="col align-items-md-stretch">
 
                     <div class="p-5 mb-4 rounded-3" id="div-select">
-                        <h4>Export Json file for data</h4>
+                        <!-- <h4>Export Json file for data</h4> -->
                         <div class="input-group mb-3">
                             <label class="input-group-text" for="select-station">Station</label>
-                            <select class="form-select" id="select-station"">
+                            <select class="form-select" id="select-station">
                                 <option selected disabled>Choose...</option>
                             </select>                        
                         </div>
                         <div class="input-group mb-3">
                             <label class="input-group-text" for="datetime-from">From</label>
-                            <input type='text' class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#datetime-from" id="datetime-from"/>
-                             
-                            
-                            <label class="input-group-text" for="datetime-to">To</label>
-                            <input type='text' class="form-control" id="datetime-to"/>
-                            
+                            <input id="datetime-from" class="form-control" type="date" disabled />
                         </div>
-                        <script type="text/javascript">
-                            $(function () {
-                                $('#datetime-from').datetimepicker({
-                                    
-                                });
-                            });
-                        </script>
-                        
-                        <button class="btn mt-4 ms-1 btn-success" type="button" id="btn-verify" disabled="disabled">Verify</button>
-                    </div>
-
+                        <div class="input-group mb-3">
+                            <label class="input-group-text" for="datetime-to">To</label>
+                            <input id="datetime-to" class="form-control" type="date" disabled />   
+                        </div>
+                        <div class="input-group mb-3">
+                            <label class="input-group-text" for="select-sensor">Sensor</label>
+                            <select class="form-select" id="select-sensor">
+                                <option selected disabled>Choose...</option>
+                            </select>                        
+                        </div>
+                        <button class="btn mt-3 btn-success" type="button" id="btn-json" disabled="disabled">Export JSON</button>
+                        <button class="btn mt-3 ms-1 btn-success" type="button" id="btn-chart" disabled="disabled">Create chart</button>
+                    </div>  
                 </div>
 
             </div>
@@ -102,113 +99,49 @@
     <!-- JavaScript Bundle with Popper -->
 
     <script>
-        
-        // $('#datetime-from').datetimepicker({
-			
-		// });
-
-        
 
         $(document).ready(function () {
 
-            stations = '<%- JSON.stringify(stations) %>';
-            stations = JSON.parse(stations);
-            for (var i=0; i<stations.length; i++) {
-                console.log(i, stations[i]);
+            data = <%- data %>;
+            // data = JSON.parse(data);
+            for (var i=0; i<data.length; i++) {
+                console.log(i, data[i][0]);
                 $('#select-station').append(`
-                <option value="${i+1}">${stations[i]}</option>
+                <option value="${i}">${data[i][0]}</option>
                 `);
             }
 
-            
+            $('#select-station').on('click', function() {
+                place = $(this).val();
+                begin = data[place][1];
+                end = data[place][2];
+                // console.log(begin, end);
+                enableDatetime(true, begin, end); 
+                changeJson(true);     
+            });
 
-            // $('#datetimepicker-to').datetimepicker({
-                
-            // });
+            function enableDatetime(enable, start, end) {
+                if (enable) {
+                    $("#datetime-from").removeAttr('disabled');
+                    $('#datetime-from').val(start.split('T')[0]);
+                    $("#datetime-to").removeAttr('disabled');
+                    $('#datetime-to').val(end.split('T')[0]);
 
-            // Select files
-            // var fileObj = [];
-            // $("#btn-select-file").on('click', function() {
-            //     $('#selected-file').trigger('click');
-            // });
+                }else {
+                    $("#datetime-from").attr('disabled', true);
+                    $("#datetime-to").attr('disabled', true);
+                };
+            };
 
-            // $("#selected-file").change(function() {
-            //     fileObj = [];
-            //     var curFile = $(this).get(0).files[0];
-            //     var fileName = curFile.name;
-            //     fileObj.push(curFile);
-                
-            //     $('#container-verify').append(`
-            //         <div class="p-2 mb-3 rounded-3 bg-basic-verify" id="div-verify">
-            //             <div class="col align-items-md-stretch">
-            //                 <div class="row-md-6">
-            //                     <div class="d-flex justify-content-between align-items-center">
-            //                         <h7>${fileName}</h7>
-            //                         <i class="bi bi-patch-question-fill" id="icon-verify"></i>
-            //                     </div>
-            //                 </div>
-            //                 <div class="row-md-6" id="info-verify">
-                            
-            //                 </div>
-            //             </div>
-            //         </div>`);
-                
-            //     changeVerify();
-            //     this.value = null;
-            // });  
-
-            // $("#btn-verify").on('click', async function() {
-            //     let form_data = new FormData();
-            //     form_data.append('myFile', fileObj[0]);
-            //     await $.ajax({
-            //         'url':'/timeline/verify',
-            //         'type':'POST',
-            //         'data': form_data,
-            //         'success': function(res) {
-            //             console.log(res.result);
-            //             if(res.result && res.result[3] == true) {
-            //                 $('#div-verify').removeClass('bg-basic-verify');
-            //                 $('#div-verify').addClass('bg-success-verify');
-            //                 $('#icon-verify').removeClass('bi-patch-question-fill');
-            //                 $('#icon-verify').addClass('bi-patch-check-fill');
-            //             }else {
-            //                 $('#div-verify').removeClass('bg-basic-verify');
-            //                 $('#div-verify').addClass('bg-error-verify');
-            //                 $('#icon-verify').removeClass('bi-patch-question-fill');
-            //                 $('#icon-verify').addClass('bi-patch-minus-fill');
-            //             }
-            //             $('#info-verify').append(`
-            //                 <div class="border-top pt-2 mt-2 text-break">${res.result[1]}
-            //                 <br>${res.result[2]}
-            //                 </div>
-            //             `);
-
-            //             $('#div-verify').removeAttr('id');
-            //             $('#info-verify').removeAttr('id');
-            //             $('#icon-verify').removeAttr('id');
-
-            //         },
-            //         'contentType': false,
-            //         'processData': false
-            //     }).catch(e=>console.log(e));
-
-            //     fileObj = [];
-            //     changeVerify();
-            //     // $('#table-body').empty();
-            //     // $('#table-body').append(`<tr></tr>`);  
-                
-            // });
-
-            // function changeVerify() {
-            //     if (fileObj.length != 0) {
-            //         $("#btn-verify").removeAttr('disabled');
-            //     }else {
-            //         $("#btn-verify").attr('disabled', true);
-            //     };
-            // };
+            function changeJson(enable) {
+                if (enable) {
+                    $("#btn-json").removeAttr('disabled');
+                }else {
+                    $("#btn-json").attr('disabled', true);
+                };
+            };
 
         });
-
     </script>
 </body>
 

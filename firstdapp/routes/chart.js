@@ -18,17 +18,13 @@ router.get('/', function(req, res) {
         args: ['stations']
     };
 
-    PythonShell.run('visualizeData.py', options, function(err, all_stations) {
+    PythonShell.run('visualizeData.py', options, function(err, all_data) {
         if (err) console.log(err);
-        // if (all_stations[0] != "error") {
-            
-        // }else {
-        //     all_stations.push(false);  
-        // }
-        // console.log(all_stations);
+        
+        // console.log(all_data);
         res.render('pages/chart', {
             title: 'Visualize data',
-            stations: all_stations,
+            data: all_data,
             doc: doc
         });
     });

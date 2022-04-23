@@ -90,3 +90,16 @@
 =============== Apr 23, 2022 (EEST) ===============
 00:00:01.502611 db@close closing
 00:00:01.502659 db@close done T·48.037µs
+=============== Apr 23, 2022 (EEST) ===============
+19:36:04.755273 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+19:36:04.760129 version@stat F·[0 1] S·630B[0B 630B] Sc·[0.00 0.00]
+19:36:04.760272 db@open opening
+19:36:04.760494 journal@recovery F·1
+19:36:04.763219 journal@recovery recovering @18
+19:36:04.790878 memdb@flush created L0@21 N·2510 S·24KiB "loc..seq,v10793":"n:`..ong,v10799"
+19:36:04.793114 version@stat F·[1 1] S·24KiB[24KiB 630B] Sc·[0.25 0.00]
+19:36:04.815187 db@janitor F·5 G·1
+19:36:04.815243 db@janitor removing table-17
+19:36:04.816806 db@open done T·56.507533ms
+23:24:04.799949 db@close closing
+23:24:04.799998 db@close done T·48.312µs

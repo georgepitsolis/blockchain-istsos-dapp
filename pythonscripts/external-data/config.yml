@@ -1,4 +1,4 @@
 istsos:
   db: blockchain
-  url: http://192.168.2.6/istsos/
-  ip: 192.168.2.6
+  url: http://192.168.2.13/istsos/
+  ip: 192.168.2.13

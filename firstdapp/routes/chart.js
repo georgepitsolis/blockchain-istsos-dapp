@@ -1,5 +1,6 @@
 var express = require('express');
 const fs = require('fs');
+const path = require('path');
 const yaml = require('js-yaml');
 let doc = yaml.load(fs.readFileSync(process.env.YAML, 'utf8'));
 
@@ -15,13 +16,12 @@ router.get('/', function(req, res) {
         pythonPath: 'python3',
         pythonOptions: ['-u'], // get print all_stations in real-time
         scriptPath: '../pythonscripts',
-        args: ['stations']
+        args: []
     };
 
     PythonShell.run('visualizeData.py', options, function(err, all_data) {
         if (err) console.log(err);
         
-        // console.log(all_data);
         res.render('pages/chart', {
             title: 'Visualize data',
             data: all_data,
@@ -55,4 +55,5 @@ function set_data_db(req, res, next) {
     });
     res.redirect('/chart');
 };
+
 module.exports = router;

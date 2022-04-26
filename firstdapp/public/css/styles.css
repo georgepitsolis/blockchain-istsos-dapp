@@ -109,6 +109,11 @@
     color: var(--error)
 }
 
+/* chart.ejs */
+.toastr {
+    
+}
+
 /* footer.ejs */
 footer {
     position: relative;

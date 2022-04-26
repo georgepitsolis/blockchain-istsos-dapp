@@ -8,19 +8,9 @@
         <%= title %>
     </title>
 
-    <!-- Bootstrap.bundle.min.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js" integrity="sha512-pax4MlgXjHEPfCwcJLQhigY7+N8rt6bVvWLFyUMuxShv170X53TRzGPmPkZmGBhk+jikR8WBM4yl7A9WMHHqvg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <!-- Include Bootstrap CDN -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-
-	<!-- Include Moment.js CDN -->
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
-
-	<!-- Include Bootstrap DateTimePicker CDN -->
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css"rel="stylesheet">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-    
     <!-- Bootstrap-icons.css -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     <!-- Style.css -->
@@ -65,14 +55,20 @@
                         <div class="input-group mb-3">
                             <label class="input-group-text" for="datetime-from">From</label>
                             <input id="datetime-from" class="form-control" type="date" disabled />
+                            <div class="invalid-feedback">
+                                Please choose a username.
+                            </div>
                         </div>
-                        <div class="input-group mb-3">
+                        <div class="input-group has-validation mb-3">
                             <label class="input-group-text" for="datetime-to">To</label>
-                            <input id="datetime-to" class="form-control" type="date" disabled />   
+                            <input id="datetime-to" class="form-control" type="date" disabled /> 
+                            <div class="invalid-feedback">
+                                Please choose a username.
+                            </div>  
                         </div>
                         <div class="input-group mb-3">
                             <label class="input-group-text" for="select-sensor">Sensor</label>
-                            <select class="form-select" id="select-sensor">
+                            <select class="form-select" id="select-sensor" disabled>
                                 <option selected disabled>Choose...</option>
                             </select>                        
                         </div>
@@ -90,6 +86,16 @@
                 </div>           
             </div>
             
+
+        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+            <div class="toast align-items-center text-white bg-danger border-0" id="toast-date-error" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                  <div class="toast-body">
+                    From and To values are incorrect.
+                  </div>
+                  <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+              </div>
         </div>
         
         <%- include("../partials/footer.ejs")%>
@@ -97,28 +103,81 @@
     </div>
 
     <!-- JavaScript Bundle with Popper -->
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/assets/js/jquery.min.js"></script>	
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
 
     <script>
+        
 
         $(document).ready(function () {
 
-            data = <%- data %>;
-            // data = JSON.parse(data);
+            data = `<%- data %>`;
+            data = data.replace(/[']+/g, '"');
+            data = JSON.parse(data);
+            // console.log(data);
+
             for (var i=0; i<data.length; i++) {
                 console.log(i, data[i][0]);
                 $('#select-station').append(`
-                <option value="${i}">${data[i][0]}</option>
+                    <option value="${i}">${data[i][0]}</option>
                 `);
             }
 
             $('#select-station').on('click', function() {
                 place = $(this).val();
-                begin = data[place][1];
-                end = data[place][2];
-                // console.log(begin, end);
-                enableDatetime(true, begin, end); 
-                changeJson(true);     
+                if (place != 'undefined' && place != null) {
+                    begin = data[place][1];
+                    end = data[place][2];
+                    sensors = data[place][3];
+                    console.log(begin, end);
+                    enableDatetime(true, begin, end); 
+                    enableSensors(true, sensors); 
+                    changeJson(true);
+                }                    
             });
+
+            $('#select-sensor').on('click', function() {
+                place = $(this).val();
+                if (place != 'undefined' && place != null) {
+                    changeChart(true);  
+                }   
+            });
+
+            $('#btn-json').on('click', function() {
+                inputData = takeValues(true);
+                if (checkDates(inputData[1], inputData[2])) {
+                    // donwload json
+                    downloadObjectAsJson(data, 'text');
+                }else {
+                    // print alert message
+                    var toast = new bootstrap.Toast($('#toast-date-error'));
+                    toast.show();
+                }
+                // console.log(inputData);
+            });
+
+            $('#btn-chart').on('click', function() {
+                inputData = takeValues();
+                console.log(inputData);
+            });
+
+            function takeValues(json) {
+                place = $('#select-station').val();
+                station = data[place][0];
+                dtFrom = $('#datetime-from').val();
+                dtTo = $('#datetime-to').val();
+                if (!json) {
+                    sensor = data[place][3][$('#select-sensor').val()];
+                    return [station, dtFrom, dtTo, sensor];
+                }else return [station, dtFrom, dtTo];
+            };
+
+            function checkDates(from, to) {
+                if (from <= to) return true;
+                else return false;
+            };
 
             function enableDatetime(enable, start, end) {
                 if (enable) {
@@ -133,6 +192,19 @@
                 };
             };
 
+            function enableSensors(enable, sensors) {
+                if (enable) {
+                    $("#select-sensor").removeAttr('disabled');
+                    for (var i=0; i<sensors.length; i++) {
+                        $('#select-sensor').append(`
+                            <option value="${i}">${sensors[i]}</option>
+                        `);
+                    }
+                }else {
+                    $("#select-sensor").attr('disabled', true);
+                };
+            };
+
             function changeJson(enable) {
                 if (enable) {
                     $("#btn-json").removeAttr('disabled');
@@ -141,7 +213,25 @@
                 };
             };
 
+            function changeChart(enable) {
+                if (enable) {
+                    $("#btn-chart").removeAttr('disabled');
+                }else {
+                    $("#btn-chart").attr('disabled', true);
+                };
+            };
+
         });
+
+        function downloadObjectAsJson(exportObj, exportName){
+            var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));
+            var downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", exportName + ".json");
+            document.body.appendChild(downloadAnchorNode); // required for firefox
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
     </script>
 </body>
 

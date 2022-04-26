@@ -107,6 +107,7 @@
     <script src="/assets/js/jquery.min.js"></script>	
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
     <script>
         
@@ -145,11 +146,23 @@
                 }   
             });
 
-            $('#btn-json').on('click', function() {
+            $('#btn-json').on('click',async function() {
                 inputData = takeValues(true);
                 if (checkDates(inputData[1], inputData[2])) {
                     // donwload json
-                    downloadObjectAsJson(data, 'text');
+                    info = JSON.stringify({station: inputData[0], startDate: inputData[1], endDate: inputData[2]});
+                    await $.ajax({
+                        'url':'/chart/take/measures',
+                        'type':'POST',
+                        'data': info,
+                        'success': function(res) {
+                            downloadObjectAsJson(res.result, inputData[0] );
+                        },
+                        'contentType': "application/json; charset=utf-8",
+                        dataType: "json",
+                        'processData': false
+                    });
+                    
                 }else {
                     // print alert message
                     var toast = new bootstrap.Toast($('#toast-date-error'));
@@ -224,7 +237,10 @@
         });
 
         function downloadObjectAsJson(exportObj, exportName){
-            var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));
+            exportObj = JSON.stringify(exportObj);
+            exportObj = exportObj.replace(/[']+/g, '"');
+            exportObj = JSON.parse(exportObj);
+            var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(exportObj);
             var downloadAnchorNode = document.createElement('a');
             downloadAnchorNode.setAttribute("href", dataStr);
             downloadAnchorNode.setAttribute("download", exportName + ".json");

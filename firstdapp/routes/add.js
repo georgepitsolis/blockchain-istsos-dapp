@@ -5,6 +5,7 @@ const path = require('path');
 const { web3Object } = require('./../utils/web3');
 const fs = require('fs');
 const yaml = require('js-yaml');
+
 let doc = yaml.load(fs.readFileSync(process.env.YAML, 'utf8'));
 
 var router = express.Router();

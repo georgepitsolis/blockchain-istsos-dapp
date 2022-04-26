@@ -28,25 +28,47 @@ def retrieve_datetime():
     except KeyError:
         return True, ans
 
-check_datetime, answer = retrieve_datetime()
-# print(answer)
-# print("Hereeeee")
-if (check_datetime):
-    all_datetimes = []
-    datetimes = answer['ObservationCollection']['member']
-    for datetime in datetimes:
-        name = datetime['name']
-        beginPos = datetime['samplingTime']['beginPosition']
-        endPos = datetime['samplingTime']['endPosition']
-        components = datetime['observedProperty']['component'][1:]
-        i = 0
-        new_components = []
-        for comp in components:
-            new_components.append(components[i].split('meteo:')[1])
-            i += 1
-        
-        all_datetimes.append([name, beginPos, endPos, new_components])
-        # print([name, beginPos, endPos, new_components])
-    print(all_datetimes)
-    # else:
-    #     print(check_datetime)
+def retrieve_measures(station, start, end):
+    start = start + 'T00:00:00'
+    end = end[:-2] + str(int(end[-2:]) + 1) + 'T00:00:00'
+    url = service_url + cur_db + '?' \
+        'procedure=' + station + '&' \
+        'eventTime=' + start + '/' + end + '&' \
+        'request=GetObservation&' \
+        'offering=temporary&' \
+        'observedProperty=meteo&' \
+        'responseFormat=application/json&' \
+        'service=SOS&' \
+        'version=1.0.0'
+    request = requests.get(url)
+    ans = request.json()
+    
+    try:
+        ans["ExceptionReport"]
+        return False, ans
+    except KeyError:
+        return True, ans
+
+if (sys.argv[1] == 'stations'):
+    check_datetime, answer = retrieve_datetime()
+    if (check_datetime):
+        all_datetimes = []
+        datetimes = answer['ObservationCollection']['member']
+        for datetime in datetimes:
+            name = datetime['name']
+            beginPos = datetime['samplingTime']['beginPosition']
+            endPos = datetime['samplingTime']['endPosition']
+            components = datetime['observedProperty']['component'][1:]
+            i = 0
+            new_components = []
+            for comp in components:
+                new_components.append(components[i].split('meteo:')[1])
+                i += 1
+            
+            all_datetimes.append([name, beginPos, endPos, new_components])
+            # print([name, beginPos, endPos, new_components])
+        print(all_datetimes)
+else:
+    check_measures, full_measures = retrieve_measures(sys.argv[2], sys.argv[3], sys.argv[4])
+    if (check_measures):
+        print(full_measures)

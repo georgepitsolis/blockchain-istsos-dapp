@@ -28,7 +28,7 @@ def retrieve_datetime():
     except KeyError:
         return True, ans
 
-def retrieve_measures(station, start, end):
+def retrieve_measures(station, start, end, sensor):
     start = start + 'T00:00:00'
     end = end[:-2] + str(int(end[-2:]) + 1) + 'T00:00:00'
     url = service_url + cur_db + '?' \
@@ -36,13 +36,14 @@ def retrieve_measures(station, start, end):
         'eventTime=' + start + '/' + end + '&' \
         'request=GetObservation&' \
         'offering=temporary&' \
-        'observedProperty=meteo&' \
+        'observedProperty=' + sensor + '&' \
         'responseFormat=application/json&' \
         'service=SOS&' \
         'version=1.0.0'
-    request = requests.get(url)
-    ans = request.json()
-    
+    # request = requests.get(url)
+    # ans = request.json()
+    request = requests.get(url, headers={'content-type':'application/json'})
+    ans = json.loads(request.text)
     try:
         ans["ExceptionReport"]
         return False, ans
@@ -69,6 +70,9 @@ if (sys.argv[1] == 'stations'):
             # print([name, beginPos, endPos, new_components])
         print(all_datetimes)
 else:
-    check_measures, full_measures = retrieve_measures(sys.argv[2], sys.argv[3], sys.argv[4])
+    check_measures, full_measures = retrieve_measures(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
     if (check_measures):
+        geom = full_measures['ObservationCollection']['member'][0]['featureOfInterest']['geom']
+        geom = geom.replace("'", '#')
+        full_measures['ObservationCollection']['member'][0]['featureOfInterest']['geom'] = geom
         print(full_measures)

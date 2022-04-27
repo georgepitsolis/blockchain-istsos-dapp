@@ -65,12 +65,11 @@ function take_measures(req, res, next) {
         pythonPath: 'python3',
         pythonOptions: ['-u'], // get print all_stations in real-time
         scriptPath: '../pythonscripts',
-        args: ['json', req.body.station, req.body.startDate, req.body.endDate]
+        args: ['json', req.body.station, req.body.startDate, req.body.endDate, req.body.sensor]
     };
 
     PythonShell.run('visualizeData.py', options, function(err, measures) {
         if (err) console.log(err);
-        
         res.status(200).send({result: measures});
     });
     

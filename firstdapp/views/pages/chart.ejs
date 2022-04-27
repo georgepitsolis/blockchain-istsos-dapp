@@ -132,34 +132,35 @@
                     begin = data[place][1];
                     end = data[place][2];
                     sensors = data[place][3];
-                    console.log(begin, end);
+                    // console.log(begin, end);
                     enableDatetime(true, begin, end); 
                     enableSensors(true, sensors); 
-                    changeJson(true);
+                    // changeJson(true);
                 }                    
             });
 
             $('#select-sensor').on('click', function() {
                 place = $(this).val();
                 if (place != 'undefined' && place != null) {
+                    changeJson(true);
                     changeChart(true);  
                 }   
             });
 
             $('#btn-json').on('click',async function() {
-                inputData = takeValues(true);
+                inputData = takeValues();
                 if (checkDates(inputData[1], inputData[2])) {
                     // donwload json
-                    info = JSON.stringify({station: inputData[0], startDate: inputData[1], endDate: inputData[2]});
+                    info = JSON.stringify({station: inputData[0], startDate: inputData[1], endDate: inputData[2], sensor: inputData[3]});
                     await $.ajax({
                         'url':'/chart/take/measures',
                         'type':'POST',
                         'data': info,
                         'success': function(res) {
-                            downloadObjectAsJson(res.result, inputData[0] );
+                            downloadObjectAsJson(res.result[0], inputData[0] );
                         },
                         'contentType': "application/json; charset=utf-8",
-                        dataType: "json",
+                        'dataType': "json",
                         'processData': false
                     });
                     
@@ -176,15 +177,14 @@
                 console.log(inputData);
             });
 
-            function takeValues(json) {
+            function takeValues() {
                 place = $('#select-station').val();
                 station = data[place][0];
                 dtFrom = $('#datetime-from').val();
                 dtTo = $('#datetime-to').val();
-                if (!json) {
-                    sensor = data[place][3][$('#select-sensor').val()];
-                    return [station, dtFrom, dtTo, sensor];
-                }else return [station, dtFrom, dtTo];
+                if ($('#select-sensor').val() == -1) sensor = 'meteo';
+                else sensor = data[place][3][$('#select-sensor').val()];
+                return [station, dtFrom, dtTo, sensor];
             };
 
             function checkDates(from, to) {
@@ -208,6 +208,9 @@
             function enableSensors(enable, sensors) {
                 if (enable) {
                     $("#select-sensor").removeAttr('disabled');
+                    $('#select-sensor').append(`
+                        <option value="-1">all</option>
+                    `);
                     for (var i=0; i<sensors.length; i++) {
                         $('#select-sensor').append(`
                             <option value="${i}">${sensors[i]}</option>
@@ -237,9 +240,14 @@
         });
 
         function downloadObjectAsJson(exportObj, exportName){
+
             exportObj = JSON.stringify(exportObj);
-            exportObj = exportObj.replace(/[']+/g, '"');
+            exportObj = exportObj.replaceAll("None", "null");
             exportObj = JSON.parse(exportObj);
+            exportObj = exportObj.replace(/[']+/g, '"');
+            exportObj = exportObj.replace(/[#]+/g, "'");
+            // console.log(exportObj)
+
             var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(exportObj);
             var downloadAnchorNode = document.createElement('a');
             downloadAnchorNode.setAttribute("href", dataStr);

@@ -144,3 +144,15 @@
 =============== Apr 27, 2022 (EEST) ===============
 01:00:25.223153 db@close closing
 01:00:25.223714 db@close done T·555.348µs
+=============== Apr 27, 2022 (EEST) ===============
+18:51:41.032428 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+18:51:41.046335 version@stat F·[2 1] S·75KiB[9KiB 66KiB] Sc·[0.50 0.00]
+18:51:41.046375 db@open opening
+18:51:41.046444 journal@recovery F·1
+18:51:41.079987 journal@recovery recovering @32
+18:51:41.100444 memdb@flush created L0@34 N·30 S·8KiB "Sna..tor,v744":"unc..own,v717"
+18:51:41.132689 version@stat F·[3 1] S·84KiB[18KiB 66KiB] Sc·[0.75 0.00]
+18:51:41.146256 db@janitor F·6 G·0
+18:51:41.146385 db@open done T·99.958021ms
+21:01:43.035831 db@close closing
+21:01:43.037533 db@close done T·1.697304ms

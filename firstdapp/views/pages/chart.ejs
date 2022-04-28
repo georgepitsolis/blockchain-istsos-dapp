@@ -55,16 +55,10 @@
                         <div class="input-group mb-3">
                             <label class="input-group-text" for="datetime-from">From</label>
                             <input id="datetime-from" class="form-control" type="date" disabled />
-                            <div class="invalid-feedback">
-                                Please choose a username.
-                            </div>
                         </div>
                         <div class="input-group has-validation mb-3">
                             <label class="input-group-text" for="datetime-to">To</label>
                             <input id="datetime-to" class="form-control" type="date" disabled /> 
-                            <div class="invalid-feedback">
-                                Please choose a username.
-                            </div>  
                         </div>
                         <div class="input-group mb-3">
                             <label class="input-group-text" for="select-sensor">Sensor</label>
@@ -82,6 +76,8 @@
             <div class="col-md-6 mb-4">
                 <div class="h-100 p-5 rounded-3" id="div-output-console">
                     <div class="accordion" id="accordion-base">
+                        <canvas id="myChart" height="400px"></canvas>
+                        
                     </div>
                 </div>           
             </div>
@@ -108,16 +104,16 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@^1"></script>
 
     <script>
-        
 
         $(document).ready(function () {
 
             data = `<%- data %>`;
             data = data.replace(/[']+/g, '"');
             data = JSON.parse(data);
-            // console.log(data);
 
             for (var i=0; i<data.length; i++) {
                 console.log(i, data[i][0]);
@@ -148,7 +144,18 @@
             });
 
             $('#btn-json').on('click',async function() {
-                inputData = takeValues();
+                callIstsos(takeValues(), 'json');
+            });
+
+            $('#btn-chart').on('click', function() {
+                callIstsos(takeValues(), 'chart');
+            });
+
+            $('#datetime-to').on('click', function() {
+                $('#datetime-to').attr('min', $('#datetime-from').val());
+            });
+
+            async function callIstsos(inputData, btn) {
                 if (checkDates(inputData[1], inputData[2])) {
                     // donwload json
                     info = JSON.stringify({station: inputData[0], startDate: inputData[1], endDate: inputData[2], sensor: inputData[3]});
@@ -157,7 +164,8 @@
                         'type':'POST',
                         'data': info,
                         'success': function(res) {
-                            downloadObjectAsJson(res.result[0], inputData[0] );
+                            if (btn == 'json') downloadObjectAsJson(res.result[0], inputData[0]);
+                            else makeChart(res.result[0], inputData);
                         },
                         'contentType': "application/json; charset=utf-8",
                         'dataType': "json",
@@ -169,13 +177,7 @@
                     var toast = new bootstrap.Toast($('#toast-date-error'));
                     toast.show();
                 }
-                // console.log(inputData);
-            });
-
-            $('#btn-chart').on('click', function() {
-                inputData = takeValues();
-                console.log(inputData);
-            });
+            }
 
             function takeValues() {
                 place = $('#select-station').val();
@@ -196,8 +198,12 @@
                 if (enable) {
                     $("#datetime-from").removeAttr('disabled');
                     $('#datetime-from').val(start.split('T')[0]);
+                    $('#datetime-from').attr('min', start.split('T')[0]);
+                    $('#datetime-from').attr('max', end.split('T')[0]);
                     $("#datetime-to").removeAttr('disabled');
                     $('#datetime-to').val(end.split('T')[0]);
+                    $('#datetime-to').attr('min', start.split('T')[0]);
+                    $('#datetime-to').attr('max', end.split('T')[0]);
 
                 }else {
                     $("#datetime-from").attr('disabled', true);
@@ -241,12 +247,7 @@
 
         function downloadObjectAsJson(exportObj, exportName){
 
-            exportObj = JSON.stringify(exportObj);
-            exportObj = exportObj.replaceAll("None", "null");
-            exportObj = JSON.parse(exportObj);
-            exportObj = exportObj.replace(/[']+/g, '"');
-            exportObj = exportObj.replace(/[#]+/g, "'");
-            // console.log(exportObj)
+            exportObj = convertToJson(exportObj);
 
             var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(exportObj);
             var downloadAnchorNode = document.createElement('a');
@@ -256,6 +257,105 @@
             downloadAnchorNode.click();
             downloadAnchorNode.remove();
         }
+
+        function makeChart(getReturn, info) {
+            getReturn = convertToJson(getReturn);
+            getReturn = JSON.parse(getReturn);
+
+            var data = getReturn.ObservationCollection.member[0].result.DataArray.values;
+            var allData = [];
+            data.forEach(element => {
+                var datetime = element[0].split('T')[0] + ' ' + element[0].split('T')[1].split('+')[0];
+                allData.push({x:datetime, y:element[1]});
+            });
+            correctTime = period(info[1], info[2]);
+            // console.log(allData);
+
+            const ctx = document.getElementById('myChart').getContext('2d');
+
+            let chartStatus = Chart.getChart("myChart"); // <canvas> id
+            if (chartStatus != undefined) {
+                chartStatus.destroy();
+            }
+            const myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: info[3],
+                        data: allData,
+                        pointRadius: 0,
+                        pointHoverRadius: 0,
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)'
+                    }]
+                },
+                options: {
+                    responsive:true,
+                    title:{
+                        display:true,
+                        text:'Recent History',
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        },
+                        x: {
+                            type: 'time',
+                            time: {
+                                parser: 'YYYY-MM-DD HH:mm:ss',
+                                unit: correctTime[0],
+                                displayFormats: correctTime[1]
+                            },
+                            distribution:'series',
+                            scaleLabel: {
+                                display:true,
+                                labelString:'Time'
+                            },
+                            bounds:'data',
+                            ticks: {
+                                source:'data',
+                            },
+                        }
+                    }
+                }
+            });
+        }
+
+        function period(start, end) {
+            st = start.split('T');
+            en = end.split('T');
+
+            stD = st[0].split('-');
+            enD = en[0].split('-');
+
+            stD.forEach(x => {
+                x = parseInt(x);
+            });
+
+            enD.forEach(x => {
+                x = parseInt(x);
+            });
+
+            if (enD[2] == stD[2] && enD[1] == stD[1] && enD[0] == stD[0]) {
+                return ['hour', {'hour': 'HH:00'}]
+            }else if (enD[2] - stD[2] <= 2 && enD[1] == stD[1] && enD[0] == stD[0]) {
+                return ['hour', {'hour': 'HH:00 DD-MM'}]
+            }else if (enD[1] == stD[1] && enD[0] == stD[0]) {
+                return ['day', {'day': 'DD-MM'}]
+            }else {
+                return ['month', {'month': 'MM-YYYY'}]
+            }
+        }
+
+        function convertToJson(data) {
+            data = JSON.stringify(data);
+            data = data.replaceAll("None", "null");
+            data = JSON.parse(data);
+            data = data.replace(/[']+/g, '"');
+            data = data.replace(/[#]+/g, "'");
+            return data
+        }
+        
     </script>
 </body>
 

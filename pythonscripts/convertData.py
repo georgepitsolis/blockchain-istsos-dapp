@@ -140,7 +140,7 @@ def convert_data_from_files(primitive_data, unread_data, conf=None):
 			if conf != None:
 				nameD = file.split("\\")[1].split(".")[0].upper()
 			else:
-				nameD = file.split("/")[-1].split(".")[0].upper()
+				nameD = file.split("/")[-1].split("_")[0].upper()
 			newName = unread_data + nameD + "_" + data[1].replace('-','').replace(':','').replace('T','')[:14] + ".txt"
 			unread = open(newName, "w")
 			for row in place:

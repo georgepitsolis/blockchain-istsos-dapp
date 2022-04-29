@@ -44,10 +44,10 @@
                                     <tr>
                                         <th>Station name</th>
                                         <th>File name</th>
-                                        <th></th>
+                                        <th width="30px"></th>
                                     </tr>
                                 </thead>
-                                <tbody id="table-body">
+                                <tbody id="table-body" class="align-middle">
                                     <tr></tr>
                                 </tbody>
                             </table> 
@@ -107,8 +107,8 @@
                         // Adding a row inside the tbody.
                         $('#table-body').append(
                             `<tr>
-                            <td>${(curFile.name).split('.')[0].toUpperCase()}</td>
-                            <td id="selected-file">${curFile.name}</td>
+                            <td class="text-break">${(curFile.name).split('_')[0].toUpperCase()}</td>
+                            <td class="text-break" id="selected-file">${curFile.name}</td>
                             <td>
                                 <button style="all: unset; cursor: pointer;" type="button" class="btn remove"><i class="bi bi-trash"></i></button>
                             </td>
@@ -136,7 +136,7 @@
                                     msg = 'This file already exist in istSOS database as well as in blockchain.';
                                     $("#output-console").prepend(
                                         `<div class="mb-5 card text-white bg-info-custom rounded-3">
-                                            <h5 class="p-3 card-header">${station}</h5>
+                                            <h5 class="p-3 card-header text-break">${station}</h5>
                                             <div class="card-body">
                                                 <p class="card-text">${msg}</p>
                                             </div>
@@ -152,7 +152,7 @@
                                     }
                                     $("#output-console").prepend(
                                         `<div class="mb-5 card text-white bg-success-custom rounded-3">
-                                            <h5 class="p-3 card-header">${station}</h5>
+                                            <h5 class="p-3 card-header text-break">${station}</h5>
                                             <div class="card-body">
                                                 <p class="card-text">${msg}</p>
                                             </div>
@@ -163,7 +163,7 @@
                                 msg = 'An error was occured.<br>This file did not added to istSOS.';
                                 $("#output-console").prepend(
                                     `<div class="mb-5 card text-white bg-danger-custom rounded-3">
-                                        <h5 class="p-3 card-header">${station}</h5>
+                                        <h5 class="p-3 card-header text-break">${station}</h5>
                                         <div class="card-body">
                                             <p class="card-text">${msg}</p>
                                         </div>

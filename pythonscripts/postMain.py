@@ -14,7 +14,7 @@ def postMain(uploadsD=None):
     with open('../pythonscripts/external-data/config.yml', 'r') as file:
         data = yaml.safe_load(file)
 
-    start_time = time.time()
+    # start_time = time.time()
 
     # For any changes you can go to config.yml
     url = data['istsos']['url']
@@ -37,10 +37,11 @@ def postMain(uploadsD=None):
     # Ready to input Station and Data to istSOS
     values = 0
     for file in csvData:
+        stationNameFull = file.split('/')[-1].split(".")[0]
         stationName = file.split('/')[-1].split("_")[0]
         # Check for station existence in istSOS. 
         # If there is not any like station POST a new one
-        print(stationName)
+        print(stationNameFull)
         if checkForStation.check_station_existence(file, url, db, stations, unreadD):
             insert, value = postData.post_data_on_station(url[:-1], db, unreadD[:-1], stationName)
             values += value

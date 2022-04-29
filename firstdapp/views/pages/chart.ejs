@@ -24,7 +24,7 @@
         <%- include("../partials/header.ejs")%>
 
         <div class="row align-items-md-stretch px-3">
-            <div class="col-md-6">
+            <div class="col-md-6" id="left">
 
                 <div class="p-5 mb-4 rounded-3" id="div-connect">
                     <h4>Connect to istSOS database</h4>
@@ -73,10 +73,10 @@
 
             </div>
 
-            <div class="col-md-6 mb-4">
+            <div class="col-md-6 mb-4" id="right">
                 <div class="h-100 p-5 rounded-3" id="div-output-console">
                     <div class="accordion" id="accordion-base">
-                        <canvas id="myChart" height="400px"></canvas>
+                        <canvas id="myChart" width="500px" height="500px"></canvas>
                         
                     </div>
                 </div>           
@@ -86,8 +86,8 @@
         <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
             <div class="toast align-items-center text-white bg-danger border-0" id="toast-date-error" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="d-flex">
-                  <div class="toast-body">
-                    From and To values are incorrect.
+                  <div class="toast-body" id="toast-body">
+                    
                   </div>
                   <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
@@ -114,6 +114,8 @@
             data = `<%- data %>`;
             data = data.replace(/[']+/g, '"');
             data = JSON.parse(data);
+
+            $('#right').attr('height', $('#left').height());
 
             for (var i=0; i<data.length; i++) {
                 console.log(i, data[i][0]);
@@ -158,25 +160,31 @@
             async function callIstsos(inputData, btn) {
                 if (checkDates(inputData[1], inputData[2])) {
                     // donwload json
-                    info = JSON.stringify({station: inputData[0], startDate: inputData[1], endDate: inputData[2], sensor: inputData[3]});
-                    await $.ajax({
-                        'url':'/chart/take/measures',
-                        'type':'POST',
-                        'data': info,
-                        'success': function(res) {
-                            if (btn == 'json') downloadObjectAsJson(res.result[0], inputData[0]);
-                            else makeChart(res.result[0], inputData);
-                        },
-                        'contentType': "application/json; charset=utf-8",
-                        'dataType': "json",
-                        'processData': false
-                    });
-                    
-                }else {
-                    // print alert message
-                    var toast = new bootstrap.Toast($('#toast-date-error'));
-                    toast.show();
-                }
+                    if (btn == 'chart' && inputData[3] == 'meteo') 
+                        showToast('Choose another sensor. This is only available for json export.');
+                    else {
+                        info = JSON.stringify({station: inputData[0], startDate: inputData[1], endDate: inputData[2], sensor: inputData[3]});
+                        await $.ajax({
+                            'url':'/chart/take/measures',
+                            'type':'POST',
+                            'data': info,
+                            'success': function(res) {
+                                if (btn == 'json') downloadObjectAsJson(res.result[0], inputData[0]);
+                                else makeChart(res.result[0], inputData);
+                            },
+                            'contentType': "application/json; charset=utf-8",
+                            'dataType': "json",
+                            'processData': false
+                        });
+                    }  
+                }else 
+                    showToast('From and To values are incorrect.');
+            }
+
+            function showToast(msg) {
+                var toast = new bootstrap.Toast($('#toast-date-error'));
+                $('#toast-body').text(msg);
+                toast.show();
             }
 
             function takeValues() {
@@ -215,7 +223,7 @@
                 if (enable) {
                     $("#select-sensor").removeAttr('disabled');
                     $('#select-sensor').append(`
-                        <option value="-1">all</option>
+                        <option value="-1">all (only json)</option>
                     `);
                     for (var i=0; i<sensors.length; i++) {
                         $('#select-sensor').append(`
@@ -291,6 +299,7 @@
                 },
                 options: {
                     responsive:true,
+                    maintainAspectRatio: false,
                     title:{
                         display:true,
                         text:'Recent History',

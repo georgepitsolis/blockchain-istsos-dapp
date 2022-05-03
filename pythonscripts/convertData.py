@@ -212,7 +212,7 @@ def convert_data_for_verification(file_for_check):
 
 		os.remove("tempFile.txt")
 		print(newName.split('_')[0])
-		print(newName.split('.')[0])
+		print(newName.split('_')[0] + '_' + newName.split('_')[-1].split('.')[0])
 		print(hashValue)
 	except:
 		print("error")

@@ -1,5 +1,3 @@
-
-
 <!-- CSS (load bootstrap from a CDN) -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
@@ -7,20 +5,28 @@
 <link rel="stylesheet" href="/css/styles.css">
 
 <header class="pb-3 px-3 mb-4 border-bottom">
-    <div class="d-flex justify-content-between align-items-center">
-        <a href="/" class="text-dark text-decoration-none">
-            <span class="fs-4">Dapp for istSOS</span>                 
-        </a>
-        <a class="text-dark" href="/">
-            <div class="d-flex justify-content-end align-items-center">
-                <a href="/add" class="text-dark text-decoration-none px-2"> Add </a>
-                <a href="/chart" class="text-dark text-decoration-none px-2"> Chart </a>
-                <a href="/timeline" class="text-dark text-decoration-none px-2"> Blockchain </a>
-                <a href="/" class="text-dark text-decoration-none">
-                    <i class="bi bi-house-door-fill ps-3"></i> 
-                </a>
-                </div>
-            </dir>   
-        </a>
-    </div>        
+    <div class="row align-items-center">
+        <div class="col-md-4" align="left">
+            <a href="/" class="text-dark text-decoration-none">
+                <span class="fs-4">Dapp for istSOS</span>                 
+            </a>
+        </div>
+        <div class="col-md-4" align="center">
+            <div class="text-dark text-decoration-none fs-3">
+                <%= region %>                
+            </div>
+        </div>
+        <div class="col-md-4">
+            <a class="text-dark bg-info" align="right">
+                <div class="d-flex justify-content-end align-items-center">
+                    <a href="/add" class="text-dark text-decoration-none px-2"> Add </a>
+                    <a href="/chart" class="text-dark text-decoration-none px-2"> Chart </a>
+                    <a href="/timeline" class="text-dark text-decoration-none px-2"> Blockchain </a>
+                    <a href="/" class="text-dark text-decoration-none">
+                        <i class="bi bi-door-open-fill ps-2"></i> 
+                    </a>
+                </div>   
+            </a>
+        </div>
+    </div>
 </header>

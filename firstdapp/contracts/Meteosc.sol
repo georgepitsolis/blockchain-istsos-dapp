@@ -9,6 +9,7 @@ contract Meteosc {
         string _hash;
         string _firstMesure;
         string _lastMesure;
+        address _address;
     }
 
     struct Days {
@@ -26,21 +27,21 @@ contract Meteosc {
     mapping(string => string[]) public info;
     string[] public stationNames;
 
-    constructor () {
-        addFile("ASI_1", "ASI", "fisrt_hash", "2022/11/10", "2022/12/10");
-        addFile("ASI_1", "ASI", "second_hash", "2022/11/10", "2022/12/10");
-        addFile("ASI_1", "ASI", "third_hash", "2022/11/10", "2022/12/10");
-        addFile("ASI_2", "ASI", "fisrt_hash", "2022/20/11", "2022/25/11");
-        addFile("ASI_2", "ASI", "second_hash", "2022/20/11", "2022/25/11");
-        addFile("ASI_3", "ASI", "fisrt_hash", "2022/25/11", "2022/05/12");
-        addFile("ASI_4", "ASI", "fisrt_hash", "2022/05/12", "2022/15/12");
-        addFile("ASI_5", "ASI", "fisrt_hash", "2022/15/12", "2023/10/01");
-        addFile("MEN_1", "MEN", "fisrt_hash", "2021/11/10", "2021/12/10");
-        addFile("MEN_2", "MEN", "fisrt_hash", "2021/12/10", "2021/14/10");
-        addFile("AXA_1", "AXA", "fisrt_hash", "2021/12/10", "2021/14/10");
-        addFile("AXA_1", "AXA", "second_hash", "2021/12/10", "2021/14/10");
-        addFile("AXA_2", "AXA", "fisrt_hash", "2021/14/10", "2022/14/01");
-    }
+    // constructor () {
+    //     addFile("ASI_1", "ASI", "fisrt_hash", "2022/11/10", "2022/12/10");
+    //     addFile("ASI_1", "ASI", "second_hash", "2022/11/10", "2022/12/10");
+    //     addFile("ASI_1", "ASI", "third_hash", "2022/11/10", "2022/12/10");
+    //     addFile("ASI_2", "ASI", "fisrt_hash", "2022/20/11", "2022/25/11");
+    //     addFile("ASI_2", "ASI", "second_hash", "2022/20/11", "2022/25/11");
+    //     addFile("ASI_3", "ASI", "fisrt_hash", "2022/25/11", "2022/05/12");
+    //     addFile("ASI_4", "ASI", "fisrt_hash", "2022/05/12", "2022/15/12");
+    //     addFile("ASI_5", "ASI", "fisrt_hash", "2022/15/12", "2023/10/01");
+    //     addFile("MEN_1", "MEN", "fisrt_hash", "2021/11/10", "2021/12/10");
+    //     addFile("MEN_2", "MEN", "fisrt_hash", "2021/12/10", "2021/14/10");
+    //     addFile("AXA_1", "AXA", "fisrt_hash", "2021/12/10", "2021/14/10");
+    //     addFile("AXA_1", "AXA", "second_hash", "2021/12/10", "2021/14/10");
+    //     addFile("AXA_2", "AXA", "fisrt_hash", "2021/14/10", "2022/14/01");
+    // }
 
     function addFile(
         string memory fullName, 
@@ -56,6 +57,7 @@ contract Meteosc {
         curfile._firstMesure = firstMesure;
         curfile._lastMesure = lastMesure;
         curfile._hash = hashV;
+        curfile._address = msg.sender;
 
         if (info[name].length == 0) {
             stationNames.push(name);

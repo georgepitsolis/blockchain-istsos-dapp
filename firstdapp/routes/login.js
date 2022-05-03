@@ -1,29 +1,36 @@
+require('dotenv').config();
 var express = require('express');
-const { web3Object } = require('./../utils/web3');
-var router = express.Router();
+const fs = require('fs');
+const yaml = require('js-yaml');
 
-var stationInfo = '';
-// function getStationInfo(){
-//     return new Promise(cur => {
-//         web3Object.contracts.meteo.deployed()
-//             .then(instance => {
-//                 return instance.getStationInfo.call({ from: web3Object.account });
-//             }).then(info => {
-//                 stationInfo = info;
-//             });
-//     }) 
-// }
+let doc = yaml.load(fs.readFileSync(process.env.YAML, 'utf8'));
+
+var router = express.Router();
 
 router.get('/', function(req, res) {
     res.render('pages/login', {
-        title: 'Login page',
-        station: stationInfo
+        title: 'Login page'
     });
 });
 
-router.get('/login', function(req, res) {
-    getStationInfo();
-    res.redirect('/main');
-});
+router.post('/select', selectRegion);
+
+function selectRegion(req, res, next) {
+    doc = yaml.load(fs.readFileSync(process.env.YAML, 'utf8'));
+
+    doc.current.port = req.body['select-region'];
+    doc.current.url = 'http://127.0.0.1:' + req.body['select-region'];
+
+    // var nodeStr = req.body['select-region'];
+    // var region = 'PORT_' + nodeStr;
+    // var node = parseInt(nodeStr);
+
+    fs.writeFile(process.env.YAML, yaml.dump(doc), (err) => {
+        if (err) {
+            console.log(err);
+        }
+    });
+    res.redirect('/');
+};
 
 module.exports = router;

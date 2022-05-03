@@ -4,10 +4,10 @@ var chalk = require('chalk');
 var path = require('path');
 const flash = require('connect-flash');
 const session = require('express-session');
-const { web3Object } = require('./utils/web3');
 
 // Set all routes
 var main = require('./routes/main');
+var login = require('./routes/login');
 var add = require('./routes/add');
 var chart = require('./routes/chart');
 var timeline = require('./routes/timeline');
@@ -39,7 +39,8 @@ const IP = process.env.SERVER_IP || '127.0.0.1';
 // use res.render to load up an ejs view file
 
 // Use pages
-app.use('/', main);         // Main page
+app.use('/', main);             // Main page
+app.use('/login', login);       // Login page
 app.use('/add', add);           // Add to istSOS
 app.use('/chart', chart);       // Visualize data
 app.use('/timeline', timeline); // BLockchain history

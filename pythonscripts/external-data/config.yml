@@ -2,3 +2,10 @@ istsos:
   db: blockchain
   url: http://192.168.2.13/istsos/
   ip: 192.168.2.13
+node:
+  '8501': Global
+  '8502': Attica
+  '8503': Islands
+current:
+  port: '8501'
+  url: http://127.0.0.1:8501

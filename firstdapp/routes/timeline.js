@@ -3,10 +3,16 @@ const formidable = require('formidable');
 const path = require('path');
 const fs = require('fs');
 const { web3Object } = require('./../utils/web3');
+const yaml = require('js-yaml');
+
+let doc = yaml.load(fs.readFileSync(process.env.YAML, 'utf8'));
 
 var router = express.Router();
 
 router.get('/', function(req, res) {
+    doc = yaml.load(fs.readFileSync(process.env.YAML, 'utf8'));
+    var nodeId = doc.current.port;
+
     web3Object.contracts.meteo.deployed()
         .then(instance => {
             return instance.getAllFiles.call({ from: web3Object.account });
@@ -18,7 +24,8 @@ router.get('/', function(req, res) {
             }
             res.render('pages/timeline', {
                 title: 'Blockchain history',
-                data: allData
+                data: allData,
+                region: doc['node'][nodeId]
             });
         });
 
@@ -71,7 +78,6 @@ function verify_file(req, res, next){
                 return instance.verifyHash.call(results[0], results[1], results[2], { from: web3Object.account });
             })
             .then(existData => {
-                // console.log(results)
                 let anw = false;
                 if (existData) {
                     anw = true;

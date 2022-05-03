@@ -129,7 +129,6 @@
                         'data': form_data,
                         'success': function(res) {
                             var check = res.result.find(x => x == 'error');
-                            console.log(res.result);
                             if(res.result && check == null) {
                                 if(res.result[0] == 'already') {
                                     station = res.result[1];

@@ -12,10 +12,12 @@ var router = express.Router();
 
 router.get('/', function(req, res) {
     doc = yaml.load(fs.readFileSync(process.env.YAML, 'utf8'));
-
+    var nodeId = doc.current.port;
+    
     res.render('pages/add', {
         title: 'Add files page',
-        doc: doc
+        doc: doc,
+        region: doc['node'][nodeId]
     });
 });
 
@@ -64,7 +66,7 @@ function upload_files(req, res, next){
     PythonShell.run('postMain.py', options, function(err, results) {
         if (err) console.log(err);
         var check = results.find(x => x == 'error');
-        if(results && check == 'null') {
+        if(results && check == null) {
             newF = results[2].split('@').slice(1);
             upload_to_blockchain(res, results, newF[0], newF[1] ,newF[2], newF[3], newF[4]);
         }else {
@@ -108,7 +110,7 @@ function upload_to_blockchain(res, results, fullName, name, hash, firstM, lastM)
         }else {
             results.unshift('already');
         }
-        // console.log(results);
+        console.log(results);
         res.status(200).send({result: results});
 
     }); 

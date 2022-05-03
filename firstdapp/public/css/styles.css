@@ -6,6 +6,29 @@
     --error: rgb(211, 43, 43);
 }
 
+/* login.ejs */
+
+.form-signin {
+    background: var(--main-gradient);
+    color: black;
+    width: 100%;
+    max-width: 340px;
+    padding: 15px;
+    border-radius: 0.5rem;
+    margin: auto;
+}
+
+.form-signin .form-floating:focus-within {
+z-index: 2;
+}
+
+.form-signin input[type="region"] {
+margin-bottom: 10px;
+border-top-left-radius: 0;
+border-top-right-radius: 0;
+}
+  
+
 /* main.ejs */
 #div-add-to-istsos {
     background: var(--main-gradient);
@@ -108,12 +131,6 @@
 .bi-patch-minus-fill {
     color: var(--error)
 }
-
-/* chart.ejs */
-.toastr {
-    
-}
-
 
 
 /* footer.ejs */

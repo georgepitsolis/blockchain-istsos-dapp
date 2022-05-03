@@ -7,48 +7,77 @@
     <title><%= title %></title>
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css"> 
     <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/signin.css">
 </head>
 
-<body>
+<body class="text-center">
 
-    <div class="container py-4">
-
-        <%- include("../partials/header.ejs")%>
-    
-        <div class="p-5 rounded-3" id="div-login">
-            <div class="container-fluid py-5">
-                <h1 class="display-5 fw-bold">Log in to blockchain</h1>
-                <p class="col-md-8 fs-4">You can add new data for this specific station on the database on istSOS.</p>
-                <a class="btn btn-outline-dark" type="button" id="btm-login" href="/login"><i class="bi bi-file-earmark-plus"></i></i> Log in</a>
+    <main class="form-signin">
+        <form class="m-3"> 
+            <i class="bi bi-door-open mb-4" style="font-size:57px;"></i>
+            <h1 class="h3 mb-3 fw-normal">Please select region</h1>
+            
+            <div class="form-floating mb-3">
+                <select type="region" class="form-select" id="floatingRegion" aria-label="Floating label select example">
+                    <option selected disabled>Select your current region</option>
+                    <option value="8501">Global</option>
+                    <option value="8502">Attica</option>
+                    <option value="8503">Islands</option>
+                </select>
+                <label for="floatingRegion">Region</label>
             </div>
-        </div>
 
-        <%- include("../partials/footer.ejs")%>
+            <!-- <div class="form-floating">
+                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                <label for="floatingInput">Email address</label>
+            </div>
+            <div class="form-floating">
+                <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                <label for="floatingPassword">Password</label>
+            </div> -->
 
-    </div>
+            <!-- <div class="checkbox mb-3">
+                <label>
+                <input type="checkbox" value="remember-me"> Remember me
+                </label>
+            </div> -->
+            <button class="w-100 btn btn-lg btn-dark" type="button" id="btn-login">Log in</button>
+            
+            <%- include("../partials/footer.ejs")%>
 
+        </form>
+
+        <form id="form-select-region" method="post" action="/login/select">
+            <input type="text" name="select-region" id="select-region" class="form-control" hidden>
+        </form> 
+    </main>
+     
     <!-- JavaScript Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <!-- <script>
-        $(document).ready(function() {
-            disableButtons(true);
-            // $('#login').on('click', function() {
-            //     if ($('#login').value == "Log in") {
-            //         $('#main-container').attr('aria-disabled', false);
-            //     }
-            // })
+    <script>
 
-            function disableButtons(disable) {
-                $('#btn-add').attr('disabled', disable);
-                $('#btn-chart').attr('disabled', disable);
-                $('#btn-timeline').attr('disabled', disable);
-            };
-        })
-    </script> -->
+        $(document).ready(function() {
+
+            $('#floatingRegion').on('click', function() {
+                place = $(this).val();
+                if (place != 'undefined' && place != null) {
+                    $('#select-region').attr('value', place);
+                }                    
+            });
+
+            $('#btn-login').on('click', function() {
+                $('#form-select-region').get(0).submit();
+            });
+
+            
+        });
+
+    </script>
 
 </body>
-
 </html>

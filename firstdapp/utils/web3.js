@@ -3,7 +3,7 @@ require('dotenv').config();
 const Web3 = require('web3');
 const TruffleContract = require('truffle-contract');
 const fs = require('fs');
-const { type } = require('os');
+const yaml = require('js-yaml');
  
 class w3 {
  
@@ -15,7 +15,10 @@ class w3 {
     }
  
     async initWeb3() {
+        let doc = yaml.load(fs.readFileSync(process.env.YAML, 'utf8'));
         if (process.env.MODE == 'development' || typeof web3 === 'undefined'){
+            console.log("Here", doc.current.url);
+
             this.web3Provider = new Web3.providers.HttpProvider(process.env.LOCAL_NODE);
         }
         else {

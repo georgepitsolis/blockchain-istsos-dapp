@@ -4,13 +4,13 @@ const path = require('path');
 const yaml = require('js-yaml');
 const { PythonShell } = require('python-shell');
 
-
 let doc = yaml.load(fs.readFileSync(process.env.YAML, 'utf8'));
 
 var router = express.Router();
 
 router.get('/', function(req, res) {
     doc = yaml.load(fs.readFileSync(process.env.YAML, 'utf8'));
+    var nodeId = doc.current.port;
 
     let options = {
         mode: 'text',
@@ -26,7 +26,8 @@ router.get('/', function(req, res) {
         res.render('pages/chart', {
             title: 'Visualize data',
             data: all_data,
-            doc: doc
+            doc: doc,
+            region: doc['node'][nodeId]
         });
     });
  

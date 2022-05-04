@@ -30,7 +30,7 @@ function selectRegion(req, res, next) {
             console.log(err);
         }
     });
-    res.redirect('/');
+    res.redirect('/main');
 };
 
 module.exports = router;

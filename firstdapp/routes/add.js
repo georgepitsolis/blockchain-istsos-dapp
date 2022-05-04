@@ -106,7 +106,13 @@ function upload_to_blockchain(res, results, fullName, name, hash, firstM, lastM)
             web3Object.contracts.meteo.deployed()
             .then(instance2 => {
                 return instance2.addFile.sendTransaction(fullName, name, hash, firstM, lastM, { from: web3Object.account });
-            });
+            })
+            .then(final => {
+                if (!final) {
+                    results.unshift('Your region has not the authority to add these data.');
+                    results.unshift('error');
+                }
+            })
         }else {
             results.unshift('already');
         }

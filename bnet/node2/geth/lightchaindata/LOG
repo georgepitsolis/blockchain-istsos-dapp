@@ -6,3 +6,27 @@
 15:05:11.980825 db@open done T·1.294197ms
 15:05:11.981212 db@close closing
 15:05:11.981236 db@close done T·23.862µs
+=============== May 4, 2022 (EEST) ===============
+13:56:12.694832 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+13:56:12.696204 version@stat F·[] S·0B[] Sc·[]
+13:56:12.696240 db@open opening
+13:56:12.696287 journal@recovery F·1
+13:56:12.696755 journal@recovery recovering @1
+13:56:12.699846 memdb@flush created L0@2 N·15 S·1KiB "H\x83I..\xb6s\x16,v8":"\xf6\x16+..\xb3\x19],v4"
+13:56:12.700415 version@stat F·[1] S·1KiB[1KiB] Sc·[0.25]
+13:56:12.706396 db@janitor F·3 G·0
+13:56:12.706432 db@open done T·10.183812ms
+13:56:12.707211 db@close closing
+13:56:12.707249 db@close done T·37.141µs
+=============== May 4, 2022 (EEST) ===============
+13:56:14.765279 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+13:56:14.765431 version@stat F·[1] S·1KiB[1KiB] Sc·[0.25]
+13:56:14.765460 db@open opening
+13:56:14.765628 journal@recovery F·1
+13:56:14.766068 journal@recovery recovering @3
+13:56:14.768500 memdb@flush created L0@5 N·1 S·385B "eth..\xb6s\x16,v17":"eth..\xb6s\x16,v17"
+13:56:14.769788 version@stat F·[2] S·1KiB[1KiB] Sc·[0.50]
+13:56:14.775786 db@janitor F·4 G·0
+13:56:14.775812 db@open done T·10.344447ms
+13:56:14.776499 db@close closing
+13:56:14.776564 db@close done T·63.926µs

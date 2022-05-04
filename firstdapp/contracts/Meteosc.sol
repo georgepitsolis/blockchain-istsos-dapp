@@ -49,25 +49,36 @@ contract Meteosc {
         string memory hashV, 
         string memory firstMesure, 
         string memory lastMesure
-    )public {
+    )public view returns (bool) {
         File memory curfile;
 
-        curfile._fullName = fullName;
-        curfile._name = name;
-        curfile._firstMesure = firstMesure;
-        curfile._lastMesure = lastMesure;
-        curfile._hash = hashV;
-        curfile._address = msg.sender;
+        if (info[name].length != 0) {
+            if (file[name][0]._address == msg.sender) {
+                curfile._fullName = fullName;
+                curfile._name = name;
+                curfile._firstMesure = firstMesure;
+                curfile._lastMesure = lastMesure;
+                curfile._hash = hashV;
+                curfile._address = msg.sender;
 
-        if (info[name].length == 0) {
-            stationNames.push(name);
+                if (info[name].length == 0) {
+                    stationNames.push(name);
+                }
+                
+                if (file[name][fullName].length == 0) {
+                    info[name].push(fullName);
+                }
+
+                file[name][fullName].push(curfile);
+                return true;
+            }else {
+                return false;
+            }
+
+        }else {
+            return false;
         }
         
-        if (file[name][fullName].length == 0) {
-            info[name].push(fullName);
-        }
-
-        file[name][fullName].push(curfile);
     }
 
     function getFile(

@@ -128,6 +128,7 @@
                         'type':'POST',
                         'data': form_data,
                         'success': function(res) {
+                            console.log(res.result);
                             var check = res.result.find(x => x == 'error');
                             if(res.result && check == null) {
                                 if(res.result[0] == 'already') {
@@ -158,8 +159,14 @@
                                         </div>`);
                                 }
                             }else {
-                                station = res.result[1].split('/').pop().split('.')[0].toUpperCase();
-                                msg = 'An error was occured.<br>This file did not added to istSOS.';
+                                if (res.result[2] == 'region') {
+                                    msg = res.result[1];
+                                    station = res.result[3].split('/').pop().split('.')[0].toUpperCase();
+                                }else {
+                                    msg = 'An error was occured.';
+                                    station = res.result[1].split('/').pop().split('.')[0].toUpperCase();
+                                }
+                                msg += '<br>This file did not added to istSOS.';
                                 $("#output-console").prepend(
                                     `<div class="mb-5 card text-white bg-danger-custom rounded-3">
                                         <h5 class="p-3 card-header text-break">${station}</h5>

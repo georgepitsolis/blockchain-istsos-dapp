@@ -9,25 +9,21 @@ let doc = yaml.load(fs.readFileSync(process.env.YAML, 'utf8'));
 
 var router = express.Router();
 
-router.get('/', function(req, res) {
+router.get('/',async function(req, res) {
     doc = yaml.load(fs.readFileSync(process.env.YAML, 'utf8'));
     var nodeId = doc.current.port;
 
-    web3Object.contracts.meteo.deployed()
-        .then(instance => {
-            return instance.getAllFiles.call({ from: web3Object.account });
-        })
-        .then(stationMesures => {
-            var allData = [];
-            for (let st of stationMesures) {
-                allData.push(st);
-            }
-            res.render('pages/timeline', {
-                title: 'Blockchain history',
-                data: allData,
-                region: doc['node'][nodeId]
-            });
-        });
+    let instance = await web3Object.contracts.meteo.deployed();
+    let stationMesures = await instance.getAllFiles.call({ from: web3Object.account });
+    var allData = [];
+    for (let st of stationMesures) {
+        allData.push(st);
+    }
+    res.render('pages/timeline', {
+        title: 'Blockchain history',
+        data: allData,
+        region: doc['node'][nodeId]
+    });
 
 });
 
@@ -89,6 +85,7 @@ function verify_file(req, res, next){
             results.push(false);
             res.status(200).send({result: results});
         }
+        console.log(results);
         
     });
 }

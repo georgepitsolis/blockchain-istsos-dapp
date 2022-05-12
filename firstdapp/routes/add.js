@@ -29,8 +29,10 @@ function upload_files(req, res, next){
     var form = new formidable.IncomingForm();
     form.multiples = true;
 
-    var uploadFolder = path.join(__dirname, "uploads");
+    var uploadFolder = path.join(__dirname, "uploads/");
     form.uploadDir = uploadFolder;
+
+    let outputEr = [];
 
     // Parsing
     form.parse(req, function(err, fields, files) {
@@ -48,11 +50,29 @@ function upload_files(req, res, next){
         // console.log("file name:", fileName);              
 
         // renames the file in the directory
-        fs.rename(file.filepath, path.join(uploadFolder, fileName), function(err) {
-            if (err) throw err;
-        });          
+        fs.renameSync(file.filepath, path.join(uploadFolder, fileName));
+        // outputEr.push(fileName);
+        // check_region(res, path.join(uploadFolder, fileName));
     });
 
+    // console.log(form.Files.myFiles); 
+    // var outputNm = []
+    // fs.readdirSync(uploadFolder).forEach(file => {
+    //     console.log(file);
+    // });
+
+    // var stationName = fileName.split('/').pop().split("_")[0].toUpperCase();
+    // let instance2 = await web3Object.contracts.meteo.deployed();
+    // let verified = await instance2.verifyRegion.call(stationName, { from: web3Object.account });
+    
+    // console.log(stationName, verified);
+    // if (!verified) {
+    //     outputEr.push(['error', 'Your region has not the authority to add these data.', 'region', fileName]);
+    //     fs.unlinkSync(path.join(uploadFolder, fileName));
+    //     // console.log(outputEr);
+    // }
+    // console.log(outputEr);
+   
     const { PythonShell } = require('python-shell');
 
     let options = {
@@ -63,15 +83,29 @@ function upload_files(req, res, next){
         args: []
     };
 
+    // if (outputEr.length != 0) {
+    //     outputEr.forEach(x => {
+    //         console.log(x);
+    //         res.status(200).send({result: x});
+    //     });
+    // } 
+    // console.log(outputEr);
+
     PythonShell.run('postMain.py', options, function(err, results) {
         if (err) console.log(err);
-        var check = results.find(x => x == 'error');
-        if(results && check == null) {
-            newF = results[2].split('@').slice(1);
-            upload_to_blockchain(res, results, newF[0], newF[1] ,newF[2], newF[3], newF[4]);
+        
+        if (results != null) {
+            var check = results.find(x => x == 'error');
+            if(results && check == null) {
+                newF = results[2].split('@').slice(1);
+                upload_to_blockchain(res, results, newF[0], newF[1] ,newF[2], newF[3], newF[4]);
+            }else {
+                res.status(200).send({result: results});
+            }
         }else {
             res.status(200).send({result: results});
         }
+        
     });
 };
 
@@ -96,30 +130,38 @@ function set_data_db(req, res, next) {
     res.redirect('/add');
 };
 
-function upload_to_blockchain(res, results, fullName, name, hash, firstM, lastM) {
-    web3Object.contracts.meteo.deployed()
-    .then(instance => {
-        return instance.verifyHash.call(name, fullName, hash, { from: web3Object.account });
-    })
-    .then(existfile => {
-        if (!existfile) {
-            web3Object.contracts.meteo.deployed()
-            .then(instance2 => {
-                return instance2.addFile.sendTransaction(fullName, name, hash, firstM, lastM, { from: web3Object.account });
-            })
-            .then(final => {
-                if (!final) {
-                    results.unshift('Your region has not the authority to add these data.');
-                    results.unshift('error');
-                }
-            })
-        }else {
-            results.unshift('already');
-        }
-        console.log(results);
-        res.status(200).send({result: results});
+async function check_region(res, stationPath) {
+    console.log("stationPath: ", stationPath);
+    var stationName = stationPath.split('/').pop().split("_")[0].toUpperCase();
+    console.log("stationName: ", stationName);
+    let instance2 = await web3Object.contracts.meteo.deployed();
+    let verified = await instance2.verifyRegion.call(stationName, { from: web3Object.account });
+    
+    var outputEr = [];
+    console.log(stationName, "verified: ", verified);
+    if (!verified) {
+        outputEr.push(['error', 'Your region has not the authority to add these data.', 'region', stationName]);
+        fs.unlinkSync(stationPath);
+        return res.status(200).send({result: outputEr[0]});
 
-    }); 
+        // console.log(outputEr);
+    }
+    console.log(outputEr);
+}
+
+async function upload_to_blockchain(res, results, fullName, name, hash, firstM, lastM) {
+    let instance = await web3Object.contracts.meteo.deployed();
+    let existFile = await instance.verifyHash.call(name, fullName, hash, { from: web3Object.account });
+    let verifyFile = await instance.verifyRegion.call(name, { from: web3Object.account });
+    
+    console.log("Exitstfile:", existFile);
+    if (!verifyFile)
+        results.unshift('error', 'Your region has not the authority to add these data.', 'region', name);
+    else if (!existFile) 
+        await instance.addFile.sendTransaction(fullName, name, hash, firstM, lastM, { from: web3Object.account });
+    else 
+        results.unshift('already');
+    return res.status(200).send({result: results});
 
 };
 

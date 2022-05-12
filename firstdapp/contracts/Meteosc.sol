@@ -25,6 +25,7 @@ contract Meteosc {
     //kathe name ASIGONIA_20221010 antistixoi se allo struct file
     mapping(string => mapping(string => File[])) public file;
     mapping(string => string[]) public info;
+    mapping(string => address) public station_address;
     string[] public stationNames;
 
     // constructor () {
@@ -49,36 +50,28 @@ contract Meteosc {
         string memory hashV, 
         string memory firstMesure, 
         string memory lastMesure
-    )public view returns (bool) {
+    )public {
         File memory curfile;
 
-        if (info[name].length != 0) {
-            if (file[name][0]._address == msg.sender) {
-                curfile._fullName = fullName;
-                curfile._name = name;
-                curfile._firstMesure = firstMesure;
-                curfile._lastMesure = lastMesure;
-                curfile._hash = hashV;
-                curfile._address = msg.sender;
+        if (verifyRegion(name)) {
+            curfile._fullName = fullName;
+            curfile._name = name;
+            curfile._firstMesure = firstMesure;
+            curfile._lastMesure = lastMesure;
+            curfile._hash = hashV;
+            curfile._address = msg.sender;
+            station_address[name] = msg.sender;
 
-                if (info[name].length == 0) {
-                    stationNames.push(name);
-                }
-                
-                if (file[name][fullName].length == 0) {
-                    info[name].push(fullName);
-                }
-
-                file[name][fullName].push(curfile);
-                return true;
-            }else {
-                return false;
+            if (info[name].length == 0) {
+                stationNames.push(name);
+            }
+            
+            if (file[name][fullName].length == 0) {
+                info[name].push(fullName);
             }
 
-        }else {
-            return false;
+            file[name][fullName].push(curfile);   
         }
-        
     }
 
     function getFile(
@@ -132,6 +125,21 @@ contract Meteosc {
         }else {
             return false;
         }
+    }
+
+    function verifyRegion(
+        string memory name
+    )public view returns (bool) {
+        if (info[name].length != 0) {
+            if (station_address[name] == msg.sender) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }else {
+            return true;
+        }        
     }
 
 }

@@ -30,6 +30,7 @@ function selectRegion(req, res, next) {
             console.log(err);
         }
     });
+    let { web3Object } = require('./../utils/web3');
     res.redirect('/main');
 };
 

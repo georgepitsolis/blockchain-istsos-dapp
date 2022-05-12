@@ -7,5 +7,5 @@ node:
   '8502': Crete
   '8503': Islands
 current:
-  port: '8503'
-  url: http://127.0.0.1:8503
+  port: '8502'
+  url: http://127.0.0.1:8502

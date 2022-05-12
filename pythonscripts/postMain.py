@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import glob
 import os
+import sys
 import checkForStation
 import convertData
 import postData

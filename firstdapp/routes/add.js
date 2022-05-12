@@ -1,8 +1,9 @@
 require('dotenv').config();
 const express = require('express');
 const formidable = require('formidable');
+const Web3 = require('web3');
 const path = require('path');
-const { web3Object } = require('./../utils/web3');
+let { web3Object } = require('./../utils/web3');
 const fs = require('fs');
 const yaml = require('js-yaml');
 
@@ -25,14 +26,13 @@ router.post('/upload/files', upload_files);
 router.post('/set/ip', set_data_ip);
 router.post('/set/db', set_data_db);
 
+
 function upload_files(req, res, next){
     var form = new formidable.IncomingForm();
     form.multiples = true;
 
     var uploadFolder = path.join(__dirname, "uploads/");
     form.uploadDir = uploadFolder;
-
-    let outputEr = [];
 
     // Parsing
     form.parse(req, function(err, fields, files) {
@@ -51,28 +51,15 @@ function upload_files(req, res, next){
 
         // renames the file in the directory
         fs.renameSync(file.filepath, path.join(uploadFolder, fileName));
-        // outputEr.push(fileName);
-        // check_region(res, path.join(uploadFolder, fileName));
+
+        fs.readdirSync(uploadFolder).forEach(file => {
+            console.log(file);
+            check_region(res, path.join(uploadFolder, fileName), uploadFolder);
+
+        });
+
     });
 
-    // console.log(form.Files.myFiles); 
-    // var outputNm = []
-    // fs.readdirSync(uploadFolder).forEach(file => {
-    //     console.log(file);
-    // });
-
-    // var stationName = fileName.split('/').pop().split("_")[0].toUpperCase();
-    // let instance2 = await web3Object.contracts.meteo.deployed();
-    // let verified = await instance2.verifyRegion.call(stationName, { from: web3Object.account });
-    
-    // console.log(stationName, verified);
-    // if (!verified) {
-    //     outputEr.push(['error', 'Your region has not the authority to add these data.', 'region', fileName]);
-    //     fs.unlinkSync(path.join(uploadFolder, fileName));
-    //     // console.log(outputEr);
-    // }
-    // console.log(outputEr);
-   
     const { PythonShell } = require('python-shell');
 
     let options = {
@@ -82,14 +69,6 @@ function upload_files(req, res, next){
         scriptPath: '../pythonscripts',
         args: []
     };
-
-    // if (outputEr.length != 0) {
-    //     outputEr.forEach(x => {
-    //         console.log(x);
-    //         res.status(200).send({result: x});
-    //     });
-    // } 
-    // console.log(outputEr);
 
     PythonShell.run('postMain.py', options, function(err, results) {
         if (err) console.log(err);
@@ -130,34 +109,35 @@ function set_data_db(req, res, next) {
     res.redirect('/add');
 };
 
-async function check_region(res, stationPath) {
+
+async function check_region(res, stationPath, stationRoad) {
     console.log("stationPath: ", stationPath);
     var stationName = stationPath.split('/').pop().split("_")[0].toUpperCase();
     console.log("stationName: ", stationName);
+
+    await web3Object.initWeb3();
+    await web3Object.initAccount();
+    await web3Object.initContractMeteo();
     let instance2 = await web3Object.contracts.meteo.deployed();
     let verified = await instance2.verifyRegion.call(stationName, { from: web3Object.account });
     
-    var outputEr = [];
+    // var outputEr = [];
     console.log(stationName, "verified: ", verified);
     if (!verified) {
-        outputEr.push(['error', 'Your region has not the authority to add these data.', 'region', stationName]);
-        fs.unlinkSync(stationPath);
-        return res.status(200).send({result: outputEr[0]});
-
-        // console.log(outputEr);
+        fs.renameSync(stationPath, path.join(stationRoad, 'error!' + stationName + '.txt'));
     }
-    console.log(outputEr);
 }
 
 async function upload_to_blockchain(res, results, fullName, name, hash, firstM, lastM) {
+    await web3Object.initWeb3();
+    await web3Object.initAccount();
+    await web3Object.initContractMeteo();
+    // console.log(web3Object.web3Provider);
     let instance = await web3Object.contracts.meteo.deployed();
     let existFile = await instance.verifyHash.call(name, fullName, hash, { from: web3Object.account });
-    let verifyFile = await instance.verifyRegion.call(name, { from: web3Object.account });
     
     console.log("Exitstfile:", existFile);
-    if (!verifyFile)
-        results.unshift('error', 'Your region has not the authority to add these data.', 'region', name);
-    else if (!existFile) 
+    if (!existFile) 
         await instance.addFile.sendTransaction(fullName, name, hash, firstM, lastM, { from: web3Object.account });
     else 
         results.unshift('already');

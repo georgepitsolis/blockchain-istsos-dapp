@@ -4,7 +4,6 @@ const Web3 = require('web3');
 const TruffleContract = require('truffle-contract');
 const fs = require('fs');
 const yaml = require('js-yaml');
-let doc = yaml.load(fs.readFileSync(process.env.YAML, 'utf8'));
  
 class w3 {
  
@@ -16,7 +15,7 @@ class w3 {
     }
  
     async initWeb3() {
-        doc = yaml.load(fs.readFileSync(process.env.YAML, 'utf8'));
+        let doc = yaml.load(fs.readFileSync(process.env.YAML, 'utf8'));
         if (process.env.MODE == 'development' || typeof web3 === 'undefined'){
             this.web3Provider = new Web3.providers.HttpProvider(doc.current.url);
         }
@@ -51,9 +50,6 @@ async function start() {
         await web3Object.initWeb3();
         await web3Object.initAccount();
         await web3Object.initContractMeteo();
-    }else {
-        // doc = yaml.load(fs.readFileSync(process.env.YAML, 'utf8'));
-        // web3Object.web3.setProvider(new Web3.providers.HttpProvider(doc.current.url));
     }
 }
  

@@ -93,6 +93,14 @@ def convert_data_from_files(primitive_data, unread_data, conf=None):
 
 	# Convert the data from the files
 	for file in primitiveDataFiles:
+		if file.split('!')[0].split('/')[-1] == 'error':
+			print('error')
+			print('Your region has not the authority to add these data.')
+			print('region')
+			print(file.split('!')[1])
+			os.remove(file)
+			continue
+
 		f = open(file, "r")
 		i = 0
 		place = []; wrongLine = []

@@ -90,7 +90,7 @@ function upload_files(req, res, next){
 
 function set_data_ip(req, res, next) {
     doc.istsos.ip = req.body['input-ip'];
-    doc.istsos.url = 'http://' + doc.istsos.ip + '/istsos/';
+    doc.istsos.url = 'https://' + doc.istsos.ip + '/istsos/';
     fs.writeFile(process.env.YAML, yaml.dump(doc), (err) => {
         if (err) {
             console.log(err);

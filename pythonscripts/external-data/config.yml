@@ -1,7 +1,7 @@
 istsos:
   db: blockchain
-  url: http://192.168.2.13/istsos/
-  ip: 192.168.2.13
+  url: https://chain.softlab.ntua.gr/istsos/
+  ip: chain.softlab.ntua.gr
 node:
   '8501': Attica
   '8502': Crete

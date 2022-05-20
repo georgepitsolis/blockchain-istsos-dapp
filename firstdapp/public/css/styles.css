@@ -7,7 +7,6 @@
 }
 
 /* login.ejs */
-
 .form-signin {
     background: var(--main-gradient);
     color: black;
@@ -45,12 +44,12 @@ border-top-right-radius: 0;
     color: white;
 }
  /* add.ejs */
- #div-output-console {
+#div-output-console {
      background: var(--main-gradient);
      color: black;
- }
+}
 
- #div-connect {
+#div-connect {
     background: var(--bs-dark);
     color: white;
 }
@@ -132,6 +131,38 @@ border-top-right-radius: 0;
     color: var(--error)
 }
 
+/* chart.ejs */
+#table-wrapper {
+    position:relative;
+}
+
+#table-scroll {
+    height: 500px;
+    overflow:auto;  
+    margin-top:20px;
+}
+
+#table-wrapper table {
+    width:100%;
+  
+}
+
+#table-wrapper table thead th .text {
+    position:absolute;   
+    top:-20px;
+    z-index:2;
+    height:20px;
+    width:35%;
+    border:1px solid red;
+}
+
+.accordion-center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
 
 /* footer.ejs */
 footer {

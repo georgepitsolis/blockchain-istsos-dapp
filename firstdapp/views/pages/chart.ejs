@@ -24,74 +24,94 @@
         <%- include("../partials/header.ejs")%>
 
         <div class="row align-items-md-stretch px-3">
-            <div class="col-md-6" id="left">
 
-                <div class="p-5 mb-4 rounded-3" id="div-connect">
-                    <h4>Connect to istSOS database</h4>
-                    <form method="post" action="/chart/set/ip">
-                        <div class="input-group input-group-sm mb-3">
-                            <span class="input-group-text" id="inputGroup-sizing-default">Ip</span>
-                            <input type="text" name="input-ip" id="input-ip" value="<%= doc['istsos']['ip'] %>" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
-                        </div>
-                    </form> 
-                    <form method="post" action="/chart/set/db">
-                        <div class="input-group input-group-sm mb-3">
-                            <span class="input-group-text" id="inputGroup-sizing-default">Db</span>
-                            <input type="text" name="input-db" id="input-db" value="<%= doc['istsos']['db'] %>" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
-                        </div>
-                    </form>
+            <div class="col-12 col-md-3 mb-4" id="left">
+                <div style="height: 40%; padding-bottom: 30px;">
+                    <div class="p-5 mb-5 rounded-3" id="div-connect" >
+                        <h4>Connect to istSOS database</h4>
+                        <form method="post" action="/chart/set/ip">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Ip</span>
+                                <input type="text" name="input-ip" id="input-ip" value="<%= doc['istsos']['ip'] %>" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                        </form> 
+                        <form method="post" action="/chart/set/db">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Db</span>
+                                <input type="text" name="input-db" id="input-db" value="<%= doc['istsos']['db'] %>" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                        </form>
+                    </div>
                 </div>
+                
 
-                <div class="col align-items-md-stretch">
-
-                    <div class="p-5 mb-4 rounded-3" id="div-select">
-                        <!-- <h4>Export Json file for data</h4> -->
-                        <div class="input-group mb-3">
-                            <label class="input-group-text" for="select-station">Station</label>
-                            <select class="form-select" id="select-station">
-                                <option selected disabled>Choose...</option>
-                            </select>                        
-                        </div>
-                        <div class="input-group mb-3">
-                            <label class="input-group-text" for="datetime-from">From</label>
-                            <input id="datetime-from" class="form-control" type="date" disabled />
-                        </div>
-                        <div class="input-group has-validation mb-3">
-                            <label class="input-group-text" for="datetime-to">To</label>
-                            <input id="datetime-to" class="form-control" type="date" disabled /> 
-                        </div>
-                        <div class="input-group mb-3">
-                            <label class="input-group-text" for="select-sensor">Sensor</label>
-                            <select class="form-select" id="select-sensor" disabled>
-                                <option selected disabled>Choose...</option>
-                            </select>                        
-                        </div>
-                        <button class="btn mt-3 btn-success" type="button" id="btn-json" disabled="disabled">Export JSON</button>
-                        <button class="btn mt-3 ms-1 btn-success" type="button" id="btn-chart" disabled="disabled">Create chart</button>
-                    </div>  
+                <div class="p-5 mb-4 rounded-3" id="div-select" style="height: 60%;">
+                    <!-- <h4>Export Json file for data</h4> -->
+                    <div class="input-group input-group-sm mb-3">
+                        <label class="input-group-text" for="select-station">Station</label>
+                        <select class="form-select" id="select-station">
+                            <option selected disabled>Choose...</option>
+                        </select>                        
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <label class="input-group-text" for="datetime-from">From</label>
+                        <input id="datetime-from" class="form-control" type="date" disabled />
+                    </div>
+                    <div class="input-group input-group-sm has-validation mb-3">
+                        <label class="input-group-text" for="datetime-to">To</label>
+                        <input id="datetime-to" class="form-control" type="date" disabled /> 
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <label class="input-group-text" for="select-sensor">Sensor</label>
+                        <select class="form-select" id="select-sensor" disabled>
+                            <option selected disabled>Choose...</option>
+                        </select>                        
+                    </div>
+                    <button class="btn mt-3 btn-success" type="button" id="btn-json" disabled="disabled">JSON</button>
+                    <button class="btn mt-3 ms-1 btn-success" type="button" id="btn-chart" disabled="disabled">Create chart</button>
                 </div>
 
             </div>
 
-            <div class="col-md-6 mb-4" id="right">
-                <div class="h-100 p-5 rounded-3" id="div-output-console">
-                    <div class="accordion" id="accordion-base">
+            <div class="col-12 col-md-6 mb-4 id="middle">
+                <div class="p-5 mb-4 rounded-3" id="div-output-console" style="height: 100%;">
+                    <div class="accordion accordion-center" id="accordion-base">
                         <canvas id="myChart" width="500px" height="500px"></canvas>
-                        
                     </div>
                 </div>           
             </div>
+
+            <div class="col-12 col-md-3 mb-4" id="right">
+                <div class="p-5 mb-4 rounded-3" id="div-connect" style="height: 100%;">
+                    <h4>Data Table</h4>
+                    <div id="table-wrapper">
+                        <div id="table-scroll">
+                            <table class="table table-sm table-dark table-hover" id="table-base">
+                                <thead>
+                                    <tr>
+                                        <th>Datetime</th>
+                                        <th>Meas.</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-body" class="align-middle">
+                                    <tr></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>       
+            </div>            
             
+        </div>
 
         <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
             <div class="toast align-items-center text-white bg-danger border-0" id="toast-date-error" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="d-flex">
-                  <div class="toast-body" id="toast-body">
-                    
-                  </div>
-                  <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    <div class="toast-body" id="toast-body">  
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
-              </div>
+            </div>
         </div>
         
         <%- include("../partials/footer.ejs")%>
@@ -114,8 +134,6 @@
             data = `<%- data %>`;
             data = data.replace(/[']+/g, '"');
             data = JSON.parse(data);
-
-            $('#right').attr('height', $('#left').height());
 
             for (var i=0; i<data.length; i++) {
                 console.log(i, data[i][0]);
@@ -277,7 +295,7 @@
                 allData.push({x:datetime, y:element[1]});
             });
             correctTime = period(info[1], info[2]);
-            // console.log(allData);
+            console.log(allData);
 
             const ctx = document.getElementById('myChart').getContext('2d');
 
@@ -328,6 +346,15 @@
                     }
                 }
             });
+            
+            allData.forEach(el => {
+                $('#table-body').append(
+                    `<tr>
+                    <td class="text-break">${el.x}</td>
+                    <td class="text-break">${el.y}</td>
+                    </tr>`);
+            });
+            
         }
 
         function period(start, end) {

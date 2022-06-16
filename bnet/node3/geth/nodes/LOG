@@ -33,3 +33,5 @@
 13:21:55.726349 version@stat F·[0 1] S·880B[0B 880B] Sc·[0.00 0.00]
 13:21:55.764397 table@compaction committed F-1 S-89KiB Ke·0 D·9666 T·51.73779ms
 13:21:55.767610 table@remove removed @2
+15:21:33.746031 db@close closing
+15:21:33.746171 db@close done T·139.059µs

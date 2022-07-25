@@ -12,7 +12,7 @@ This project is a development of a model that guarantees the assurance of spatia
 
 ## Languages and Tools
 
-- EJS
+- EJS/JavaScript
 - Python (for converting txt primitive data files to JSON object)
 - Solidity (for smart contract)
 
@@ -47,5 +47,14 @@ The objective of this thesis is the development of a model that guarantees the a
 
 ## GUI
 
+![dapp-login](https://user-images.githubusercontent.com/51331627/180774396-bf1965fc-36f2-4b04-be56-4a3af1cd9eb9.png)
 
+![dapp-main](https://user-images.githubusercontent.com/51331627/180774639-1d272acc-a230-496e-a507-dbb8c316dc4d.png)
 
+![dapp-add-results-2](https://user-images.githubusercontent.com/51331627/180774681-2e11cfd0-10bb-4541-ad8d-ca1552d20be4.png)
+
+![dapp-chart](https://user-images.githubusercontent.com/51331627/180774715-1ed3af3d-52fd-4052-86a5-10133ffb1be4.png)
+
+![dapp-timeline-verification-wrong](https://user-images.githubusercontent.com/51331627/180774741-4ba07f10-6347-4654-b2ea-258f4f0e6c4e.png)
+
+![dapp-timeline-verification](https://user-images.githubusercontent.com/51331627/180774900-55533f41-b46f-4e28-8407-91f324de2b7a.png)

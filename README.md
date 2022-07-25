@@ -45,4 +45,7 @@ Implementation of a private permissioned blockchain for geospatial data.
 
 The objective of this thesis is the development of a model that guarantees the assurance of spatially referenced time series of metric data using standard web services. This model foundations is the implementation of a blockchain network that cooperates with the standard service of istSOS platform, aiming optimal data management and maximum data security. This model was developed based on real data provided by the organization of the National Observatory of Athens using the technology of a private Ethereum blockchain. Initially, data were processed according to istSOS standard to ensure compatibility and identify and correct possible errors. Data uploading took place simultaneously at istSOS platform and the blockchain network. In parallel, a user-friendly decentralized web application was created to facilitate the smooth coexistence of both technologies. The decentralized application’s main features were the simultaneously data uploading at istSOS platform and blockchain network, certification of the user's files with authenticated network records, visualization of the blockchain network, measurements display in a graph with specific standards and finally the ability to download these observations in JSON format file. From the results, it is concluded that such a model will ensure data protection and can be used in a wide range of applications in the future.
 
+## GUI
+
+
 
